@@ -13,7 +13,7 @@ String test = "Fra Patrick";
     public void start(Stage primaryStage) throws Exception{
         Parent root = FXMLLoader.load(getClass().getResource("sample.fxml"));
 
-        primaryStage.setTitle("Hello World heihei :) ");
+        primaryStage.setTitle("Hello World from Linda");
         primaryStage.setScene(new Scene(root, 300, 275));
         primaryStage.show();
     }
