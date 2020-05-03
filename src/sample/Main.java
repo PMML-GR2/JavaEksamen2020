@@ -7,6 +7,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 public class Main extends Application {
+String test = "Fra Patrick";
 
     @Override
     public void start(Stage primaryStage) throws Exception{
