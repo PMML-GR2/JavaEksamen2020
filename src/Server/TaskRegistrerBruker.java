@@ -37,12 +37,12 @@ public class TaskRegistrerBruker implements Runnable{
                 utTekst = new DataOutputStream(socket.getOutputStream());
 
                 //Skriv til klienten
-                navn = utTekst.readUTF();
-                k = utTekst.readUTF();
-                alder = utTekst.readInt();
-                fangOppString = utTekst.readUTF();
-                bosted = utTekst.readUTF();
-                tlf = utTekst.readUTF();
+                navn = innTekst.readUTF();
+                k = innTekst.readUTF();
+                alder = innTekst.readInt();
+                fangOppString = innTekst.readUTF();
+                bosted = innTekst.readUTF();
+                tlf = innTekst.readUTF();
 
                 //Splitt String og legg inn i ArrayList
                 String [] splitTabell = fangOppString.split(",");

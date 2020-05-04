@@ -12,17 +12,11 @@ import java.util.ArrayList;
 public class Server {
     //static private Thread registrerBruker = new Thread(new TaskRegistrerBruker(8000));
 
-    public static void main(String[] args) {
-        ArrayList<String> interesser = new ArrayList<String>();
-        //registrerBruker.start();
-        DatingDB.registrerBruker("Mikael", "M", 30, interesser, "Bø", "88888888");
-        DatingDB.visInteresser();
-
     //initialiserer server variablene
     static int port = 8000;
     static ServerSocket serverSocket = startOpp(port);
     static String handling;
- static  Socket socket;
+    static  Socket socket;
 
 
     public static void main(String[] args) {
