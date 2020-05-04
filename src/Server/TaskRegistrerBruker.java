@@ -7,35 +7,31 @@ import java.net.Socket;
 import java.util.ArrayList;
 
 public class TaskRegistrerBruker implements Runnable{
+    //InnVariabler til registrering
     String navn;
     String k;
     int alder;
     ArrayList<String> interesser = new ArrayList<>();
     String bosted;
     String tlf;
-    private int port;
 
-    public TaskRegistrerBruker(int port){
-        this.port = port;
+    //ServerVariabler
+    Socket socket;
+    DataInputStream innTekst = null;
+
+    public TaskRegistrerBruker(Socket socket){
+        this.socket = socket;
     }
-
-    DataInputStream utTekst = null;
 
     @Override
     public void run() {
         try {
-            //Opprett en server
 
-            ServerSocket serverSocket = new ServerSocket(port);
-        System.out.println("Server er startet opp på " + port);
-            while (true) {
-                //Lytter og venter på at noen skal koble seg til å lage ny bruker
-                Socket socket = serverSocket.accept();
-
-                System.out.println("Bruker koblet seg på");
+                //bruker til å splitte interesse tekst
                 String fangOppString;
+
                 //Lag dataOutput til klient
-                utTekst = new DataInputStream(socket.getInputStream());
+                innTekst = new DataInputStream(socket.getInputStream());
 
                 //Skriv til klienten
                 navn = utTekst.readUTF();
@@ -47,19 +43,18 @@ public class TaskRegistrerBruker implements Runnable{
 
                 //Splitt String og legg inn i ArrayList
                 String [] splitTabell = fangOppString.split(",");
-                System.out.println(fangOppString);
                 for(String s: splitTabell){
                     interesser.add(s);
                 }
 
                 DatingDB.registrerBruker(navn,k,alder,interesser,bosted,tlf);
-            }
+                System.out.println("En bruker er registrert");
 
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
             try {
-                utTekst.close();
+                innTekst.close();
             } catch (IOException e) {
                 e.printStackTrace();
             }
