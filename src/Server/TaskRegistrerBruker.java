@@ -10,7 +10,7 @@ import java.util.ArrayList;
 public class TaskRegistrerBruker implements Runnable{
     //InnVariabler til registrering
     String navn;
-    char k;
+    String k;
     int alder;
     ArrayList<String> interesser = new ArrayList<>();
     String bosted;
@@ -37,12 +37,12 @@ public class TaskRegistrerBruker implements Runnable{
                 utTekst = new DataOutputStream(socket.getOutputStream());
 
                 //Skriv til klienten
-                navn = innTekst.readUTF();
-                k = innTekst.readChar();
-                alder = innTekst.readInt();
-                fangOppString = innTekst.readUTF();
-                bosted = innTekst.readUTF();
-                tlf = innTekst.readUTF();
+                navn = utTekst.readUTF();
+                k = utTekst.readUTF();
+                alder = utTekst.readInt();
+                fangOppString = utTekst.readUTF();
+                bosted = utTekst.readUTF();
+                tlf = utTekst.readUTF();
 
                 //Splitt String og legg inn i ArrayList
                 String [] splitTabell = fangOppString.split(",");
@@ -50,11 +50,12 @@ public class TaskRegistrerBruker implements Runnable{
                     interesser.add(s);
                 }
 
-                DatingDB.insertData(navn,k,alder,interesser,bosted,tlf);
 
                 utTekst.writeInt(101);
-                System.out.println("En bruker er registrert");
 
+                DatingDB.registrerBruker(navn,k,alder,interesser,bosted,tlf);
+
+                System.out.println("En bruker er registrert");
 
         } catch (IOException e) {
             e.printStackTrace();
