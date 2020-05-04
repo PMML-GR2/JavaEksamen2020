@@ -51,9 +51,7 @@ public class TaskRegistrerBruker implements Runnable{
                 }
 
 
-                utTekst.writeInt(101);
-
-                DatingDB.registrerBruker(navn,k,alder,interesser,bosted,tlf);
+                utTekst.writeInt(DatingDB.registrerBruker(navn,k,alder,interesser,bosted,tlf));
 
                 System.out.println("En bruker er registrert");
 

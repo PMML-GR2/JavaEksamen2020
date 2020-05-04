@@ -51,6 +51,9 @@ public class Server {
                     case "INTERESSERT":
                         System.out.println("Interessert");
                         break;
+                    case "LOGGINN":
+                        System.out.println("Logg Inn Id: " + innTekst.readInt());
+                        break;
                 }
             }
                  }catch (IOException ex){ex.printStackTrace();}

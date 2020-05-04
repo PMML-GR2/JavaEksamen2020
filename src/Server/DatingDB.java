@@ -16,11 +16,16 @@ public class DatingDB {
         }
         return conn;
     }
-   static public void registrerBruker(String navn, String kjonn, int alder, ArrayList<String> interesser, String bosted, String tlf) {
-       //System.out.println(navn + k + alder + bosted + tlf);
-       //for(String s: interesser) {
-       //    System.out.println(s);
-       //}
+
+   static public synchronized int registrerBruker(String navn, String kjonn, int alder, ArrayList<String> interesser, String bosted, String tlf) {
+      /*
+       System.out.println(navn + kjonn + alder + bosted + tlf);
+       for(String s: interesser) {
+           System.out.println(s);
+       }
+*/
+      int persID = 0;
+
        String sql = "INSERT INTO bruker(Navn, Kjonn, Alder, Interesser, Bosted, Tlf) VALUES (?,?,?,?,?,?)";
        try (Connection conn = connect();
             PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -34,7 +39,21 @@ public class DatingDB {
        } catch (SQLException e) {
            System.out.println(e.getMessage());
        }
+
+       sql = "SELECT MAX(PersonID) AS 'PersonID' FROM bruker";
+       try (Connection conn = connect();
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery(sql)) {
+               persID =  rs.getInt("PersonID");
+               System.out.print("INNI HEEEEEEEEER" + persID);
+       }
+       catch (SQLException e) {
+           System.out.println(e.getMessage() + "HEIEHIEFHSDF");
+       }
+
+    return persID;
    }
+
    static public void visInteresser() {
         String sql = "SELECT Interesser FROM bruker";
 
@@ -50,7 +69,7 @@ public class DatingDB {
         }
     }
 
-    static public void  selectTableWhere(int personID, char k, ArrayList alder){
+    static public void  selectTableWhere(int personID, String k, ArrayList alder){
        System.out.println("Fant en " + k + " i alder fra " + alder.get(0)+ " - " + alder.get(1)+ " til person " + personID);
     }
 }
