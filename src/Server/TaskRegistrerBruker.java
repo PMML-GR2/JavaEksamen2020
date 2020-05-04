@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 public class TaskRegistrerBruker implements Runnable{
     String navn;
-    char k;
+    String k;
     int alder;
     ArrayList<String> interesser = new ArrayList<>();
     String bosted;
@@ -39,7 +39,7 @@ public class TaskRegistrerBruker implements Runnable{
 
                 //Skriv til klienten
                 navn = utTekst.readUTF();
-                k = utTekst.readChar();
+                k = utTekst.readUTF();
                 alder = utTekst.readInt();
                 fangOppString = utTekst.readUTF();
                 bosted = utTekst.readUTF();
@@ -52,7 +52,7 @@ public class TaskRegistrerBruker implements Runnable{
                     interesser.add(s);
                 }
 
-                DatingDB.insertData(navn,k,alder,interesser,bosted,tlf);
+                DatingDB.registrerBruker(navn,k,alder,interesser,bosted,tlf);
             }
 
         } catch (IOException e) {
