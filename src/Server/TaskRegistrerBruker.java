@@ -1,6 +1,7 @@
 package Server;
 
 import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -18,6 +19,7 @@ public class TaskRegistrerBruker implements Runnable{
     //ServerVariabler
     Socket socket;
     DataInputStream innTekst = null;
+    DataOutputStream utTekst = null;
 
     public TaskRegistrerBruker(Socket socket){
         this.socket = socket;
@@ -32,6 +34,7 @@ public class TaskRegistrerBruker implements Runnable{
 
                 //Lag dataOutput til klient
                 innTekst = new DataInputStream(socket.getInputStream());
+                utTekst = new DataOutputStream(socket.getOutputStream());
 
                 //Skriv til klienten
                 navn = utTekst.readUTF();
@@ -47,7 +50,11 @@ public class TaskRegistrerBruker implements Runnable{
                     interesser.add(s);
                 }
 
+
+                utTekst.writeInt(101);
+
                 DatingDB.registrerBruker(navn,k,alder,interesser,bosted,tlf);
+
                 System.out.println("En bruker er registrert");
 
         } catch (IOException e) {
@@ -55,6 +62,7 @@ public class TaskRegistrerBruker implements Runnable{
         } finally {
             try {
                 innTekst.close();
+                utTekst.close();
             } catch (IOException e) {
                 e.printStackTrace();
             }
