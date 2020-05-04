@@ -10,4 +10,8 @@ public class DatingDB {
             System.out.println(s);
         }
     }
+
+    static public void  selectTableWhere(int personID, char k, ArrayList alder){
+       System.out.println("Fant en " + k + " i alder fra " + alder.get(0)+ " - " + alder.get(1)+ " til person " + personID);
+    }
 }
