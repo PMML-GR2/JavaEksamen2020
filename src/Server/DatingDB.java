@@ -54,15 +54,18 @@ public class DatingDB {
 
     return persID;
    }
-   static public void visNavnOgTlf(int PersonID1, int PersonID2) {
+   static public ArrayList<String> visNavnOgTlf(int PersonID1, int PersonID2) {
+        ArrayList<String> NavnOgTlf = new ArrayList<String>();
        String sql = "SELECT Navn, Tlf FROM bruker WHERE PersonID = " + PersonID2;
 
        try (Connection conn = connect();
             Statement stmt = conn.createStatement();
             ResultSet rs = stmt.executeQuery(sql)) {
            while (rs.next()) {
-               System.out.println(rs.getString("Navn") + "\t" +
-                       rs.getString("Tlf"));
+               NavnOgTlf.add(rs.getString("Navn"));
+               NavnOgTlf.add(rs.getString("Tlf"));
+               //System.out.println(rs.getString("Navn") + "\t" +
+                 //      rs.getString("Tlf"));
            }
        } catch (SQLException e) {
            System.out.println(e.getMessage());
@@ -78,7 +81,9 @@ public class DatingDB {
        catch (SQLException e) {
            System.out.println(e.getMessage());
        }
+       return NavnOgTlf;
    }
+
 
    static public void visMineUtsendtInfo(int PersonID) {
         ArrayList<String> bedtomNavn = new ArrayList<String>();
