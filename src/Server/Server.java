@@ -1,10 +1,12 @@
 package Server;
 
 import Felles.Handling;
+import sample.Bruker;
 
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.lang.reflect.Array;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -17,6 +19,7 @@ public class Server {
     static ServerSocket serverSocket = startOpp(port);
     static String handling;
     static  Socket socket;
+    static ArrayList<Bruker> brukerListe = new ArrayList<>();
 
 
     public static void main(String[] args) {
@@ -66,7 +69,9 @@ public class Server {
                         break;
                 }
             }
-                 }catch (IOException ex){ex.printStackTrace();}*/
+
+                 }catch (IOException ex){ex.printStackTrace();}
+
     }
 
 
