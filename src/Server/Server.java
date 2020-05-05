@@ -18,12 +18,11 @@ public class Server {
     static int port = 8000;
     static ServerSocket serverSocket = startOpp(port);
     static String handling;
-    static  Socket socket;
+    static Socket socket;
     static ArrayList<Bruker> brukerListe = new ArrayList<>();
 
 
     public static void main(String[] args) {
-
         DataInputStream innTekst = null;
 
         TaskKjørSøk kjørSøk;
@@ -33,13 +32,12 @@ public class Server {
         //DatingDB.visNavnOgTlf(10,13);
         //ArrayList<String> test = new ArrayList<>();
         //test.add(DatingDB.visNavnOgTlf(10,13).toString());
-        System.out.println(DatingDB.visNavnOgTlf(10,13).toString());
+        //System.out.println(DatingDB.visNavnOgTlf(10, 13).toString());
 
 
         //Lytter og venter på at noen skal koble seg til å lage ny bruker
-/*
-        try{
-            while(true) {
+        try {
+            while (true) {
                 Socket socket = serverSocket.accept();
 
                 innTekst = new DataInputStream(socket.getInputStream());
@@ -69,11 +67,10 @@ public class Server {
                         break;
                 }
             }
-
-                 }catch (IOException ex){ex.printStackTrace();}
+        }
+        catch (IOException ex){ex.printStackTrace();}
 
     }
-
 
     //Opprett en server
     static private ServerSocket startOpp(int port){
@@ -81,10 +78,10 @@ public class Server {
         try {
             serverSocket = new ServerSocket(port);
             System.out.println("Server er startet opp på " + port);
-        } catch (IOException e) {
+        }
+        catch (IOException e) {
             e.printStackTrace();
         }
-
         return serverSocket;
     }
 }
