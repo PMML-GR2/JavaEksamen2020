@@ -29,13 +29,15 @@ public class Server {
         TaskKjørSøk kjørSøk;
         TaskRegistrerBruker regBruker;
 
-        DatingDB.søkMatch(5,"M",1, 70);
+
+       // DatingDB.søkMatch(8,"M",1, 70);
         //Lytter og venter på at noen skal koble seg til å lage ny bruker
 
         try{
             while(true) {
                 Socket socket = serverSocket.accept();
 
+                System.out.println("kjører");
                 innTekst = new DataInputStream(socket.getInputStream());
                 handling = innTekst.readUTF();
 

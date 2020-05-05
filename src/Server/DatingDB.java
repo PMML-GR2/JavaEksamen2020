@@ -43,20 +43,6 @@ public class DatingDB {
             System.out.println(e.getMessage());
         }
 
-        String sql2 = "INSERT INTO bruker(Navn, Kjonn, Alder, Interesser, Bosted, Tlf) VALUES (?,?,?,?,?,?)";
-        try (Connection conn = connect();
-             PreparedStatement pstmt = conn.prepareStatement(sql2)) {
-            pstmt.setString(1, navn);
-            pstmt.setString(2, kjonn);
-            pstmt.setInt(3, alder);
-            pstmt.setString(4, String.valueOf(interesser));
-            pstmt.setString(5, bosted);
-            pstmt.setString(6, tlf);
-            pstmt.executeUpdate();
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
-
         sql = "SELECT MAX(PersonID) AS 'PersonID' FROM bruker";
         try (Connection conn = connect();
              Statement stmt = conn.createStatement();
@@ -71,27 +57,20 @@ public class DatingDB {
     }
 
     static public void søkMatch(int PersonID, String kjonn, int minAlder, int maxAlder) {
+        //Finn brukere
         String sql = "SELECT * FROM bruker "
                 + "WHERE Kjonn = " + "'" + kjonn + "'"
-                + " AND Alder BETWEEN " + minAlder + " AND " + maxAlder
+                + " AND Alder BETWEEN " + minAlder + " AND " + maxAlder + " AND PersonID <> " + PersonID
                 + " LIMIT 10;";
 
-
-        HashMap<Integer, ArrayList<String>> interesseMap = new HashMap<>();
         ArrayList<Bruker> brukerListe = new ArrayList<>();
-
         Bruker bruker;
-        String [] interess = {"Bil","Hest","musikk"," Steinkasting"};
-        Bruker eier = new Bruker(8, "Felix", "M", 27, new ArrayList<>(Arrays.asList(interess)), "Film", "2352352");
+        Bruker eier;
 
-        /*
-        //DUMMY LISTE
-        ArrayList<String> interesseListe = new ArrayList<>();
-        interesseListe.add("Bil");
-        interesseListe.add("Hest");
-        interesseListe.add("musikk");
-        interesseListe.add("Steinkasting");
-*/
+
+       //String [] interess = {"Bil","Hest","musikk"," Steinkasting", "Naruto"};
+
+
         //Henter alle brukere som matcher på alder og kjønn
         try (Connection conn = connect();
              Statement stmt = conn.createStatement();
@@ -111,24 +90,44 @@ public class DatingDB {
 
                 bruker = new Bruker(personID, navn, kjønn, alder, new ArrayList<>(Arrays.asList(splitTabell)), bosted, tlfNr);
                 brukerListe.add(bruker);
-                //System.out.println(eier.toString());
+            }
+             }catch(SQLException e){
+                System.out.println(e.getMessage());
+            }
 
+       String sql2 = "SELECT * FROM Bruker WHERE PersonID = " + PersonID;
+
+            try (Connection conn = connect();
+                 Statement stmt = conn.createStatement();
+                 ResultSet rs = stmt.executeQuery(sql2)) {
+                while (rs.next()) {
+                    //Henter all brukerinfoen og legger dem inn i brukertabellen.
+                    int personID = rs.getInt("PersonID");
+                    String navn = rs.getString("Navn");
+                    String kjønn = rs.getString("Kjonn");
+                    int alder = rs.getInt("Alder");
+                    String interesseTekst = rs.getString("interesser");
+                    String bosted = rs.getString("Bosted");
+                    String tlfNr = rs.getString("Tlf");
+                    int lengde = interesseTekst.length() - 1;
+                    String kuttInteresseTekst = interesseTekst.substring(1, lengde);
+                    String[] splitTabell = kuttInteresseTekst.split(",");
+
+                    eier = new Bruker(personID, navn, kjønn, alder, new ArrayList<>(Arrays.asList(splitTabell)), bosted,tlfNr);
+                    sammenligneInteresser(brukerListe, eier);
+                }
+            } catch (SQLException e) {
+                System.out.println(e.getMessage());
             }
 
             //Sammenligner interessen til bruker og matcher og sorterer utifra hvor mye de matcher.
-            sammenligneInteresser(brukerListe, eier);
 
 
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
     }
 
     //Går igjennom alle matcher sine interesser og gir dem poeng dersom det er en match i interesse.
     //Sender ut liste med brukere sortert fra størst til minst poeng. Dem med mest poeng har mest til felles.
     static public void sammenligneInteresser(ArrayList<Bruker> brukerTabell, Bruker eier) {
-        //HashMap<Integer, Integer> poengMap = new HashMap<>();
-        //HashMap<Integer, ArrayList<String>> matchMap = new HashMap<>();
         int i = 0;
         ArrayList<String> eierInteresse = new ArrayList<>();
         eierInteresse.addAll(eier.getInterresser());
@@ -147,69 +146,22 @@ public class DatingDB {
                     j.trim();
                     if (s.equals(j)) {
                         b.setPoengSum(b.getPoengSum() + 1);
-                        nyTabell.add(b);
-                       System.out.print("(TRUE!)");
                     }
-                    System.out.print(b.getPersonID() + ": " + s + "-" + j + ",  ");
+
                 }
             }
+
+            brukerInteresse.clear();
+            nyTabell.add(b);
             System.out.println("-");
         }
 
-        Collections.sort(nyTabell);
-        //System.out.println("Etter: " +nyTabell);
+        Collections.sort(nyTabell,Collections.reverseOrder());
 
         for(Bruker b: nyTabell) {
-            System.out.println(b.getPoengSum() + " " + b.getFornavn());
+            System.out.println(b.getPersonID() + ": " + b.getPoengSum() + " " + b.getFornavn());
         }
 
-        //For å sammenligne interesser og tilføre dem poeng mapper jeg dem til poengsum
-           /*
-        for (Bruker b : brukerTabell) {
-            matchMap.put(b.getPersonID(), b.getInterresser());
-            i++;
-        }
-        //brukerTabell.get(i).getInterresser()
-
-
-        for (int key : matchMap.keySet()) {
-            int poeng = 0;
-
-            for (String s : eier) {
-                s.trim();
-                for (String j : matchMap.get(key)) {
-                    j.trim();
-                    if (s.equals(j)) {
-                        poeng += 1;
-                        System.out.print("(TRUE!)");
-                    }
-                    System.out.print(key + ": " + s + "-" + j + ",  ");
-                }
-            }
-            poengMap.put(key, poeng);
-            System.out.println();
-        }
-        System.out.println(poengMap);
-
-
-        //Skriver ut resultatet i sortert rekkefølge
-
-        Iterator it = poengMap.entrySet().iterator();
-        while (it.hasNext()) {
-            Map.Entry pair = (Map.Entry) it.next();
-            for(Bruker b: brukerTabell){
-                if(b.getPersonID() == (int)pair.getKey()){
-                    b.setPoengSum((int)pair.getValue());
-                }
-            }
-            //System.out.println(pair.getKey() + " = " + pair.getValue());
-            it.remove(); // avoids a ConcurrentModificationException
-        }
-
-         */
-       // Collections.sort(brukerTabell);
-        //for(Bruker b: brukerTabell)
-        //System.out.println(b.getPoengSum());
     }
 
    static public void visNavnOgTlf(int PersonID1, int PersonID2) {
