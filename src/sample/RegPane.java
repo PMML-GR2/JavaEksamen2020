@@ -1,10 +1,7 @@
 package sample;
 
 import javafx.geometry.Insets;
-import javafx.scene.control.Label;
-import javafx.scene.control.RadioButton;
-import javafx.scene.control.TextField;
-import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
@@ -33,6 +30,7 @@ public class RegPane extends VBox {
     private RadioButton velgKvinne;
     private RadioButton velgMann;
     private RadioButton velgBeggeKjonn;
+    private Button lagreKnapp;
 
 
     public RegPane() {
@@ -100,7 +98,7 @@ public class RegPane extends VBox {
         textFieldTlfNr = new TextField("");
         textFieldTlfNr.setMaxWidth(350.0);
         getChildren().add(textFieldTlfNr);
-
+/*
         labelAlderPartner = new Label("Ønsket alder på partner: ");
         getChildren().add(labelAlderPartner);
 
@@ -134,9 +132,19 @@ public class RegPane extends VBox {
         velgKvinne.setToggleGroup(toggleGroup);
         velgMann.setToggleGroup(toggleGroup);
         velgBeggeKjonn.setToggleGroup(toggleGroup);
+*/
+        lagreKnapp = new Button("Lagre!");
+        getChildren().add(lagreKnapp);
 
     }
 
 
 }
+
+/*
+ArrayList<Bruker> matchBrukere = new ArrayList<>();
+        ArrayList<Bruker> lagtTilBruker = new ArrayList<>();
+        ArrayList<Bruker> brukerHarLagtTil = new ArrayList<>();
+        Bruker bruker; //Din bruker
+ */
 

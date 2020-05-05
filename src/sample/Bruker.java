@@ -12,6 +12,7 @@ public class Bruker {
     private String tlfNr;
 
     public Bruker() {
+
     }
 
     public String getFornavn() {
