@@ -45,7 +45,7 @@ public class ProfilePane extends BorderPane {
         tlfNr = new Label("Telefon:");
         tlfNr.setFont(fastFont);
         interessertKnapp = new Button("Interessert!");
-        interessertKnapp.setStyle("-fx-background-color: #e6eeff");
+        interessertKnapp.setStyle("-fx-background-color:#ce93a2;");
         interessertKnapp.setPrefSize(150, 35);
 
 

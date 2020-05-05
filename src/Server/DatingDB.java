@@ -19,15 +19,7 @@ public class DatingDB {
     }
 
     static public synchronized int registrerBruker(String navn, String kjonn, int alder, ArrayList<String> interesser, String bosted, String tlf) {
-      /*
-       System.out.println(navn + kjonn + alder + bosted + tlf);
-       for(String s: interesser) {
-           System.out.println(s);
-       }
-*/
-
         int persID = 0;
-
         String sql = "INSERT INTO bruker(Navn, Kjonn, Alder, Interesser, Bosted, Tlf) VALUES (?,?,?,?,?,?)";
 
         try (Connection conn = connect();
@@ -52,7 +44,6 @@ public class DatingDB {
         } catch (SQLException e) {
             System.out.println(e.getMessage() + "HEIEHIEFHSDF");
         }
-
         return persID;
     }
 
@@ -63,15 +54,12 @@ public class DatingDB {
                 + " AND Alder BETWEEN " + minAlder + " AND " + maxAlder + " AND PersonID <> " + PersonID
                 + " LIMIT 10;";
 
+
         ArrayList<Bruker> brukerListe = new ArrayList<>();
         Bruker bruker;
+
         Bruker eier;
 
-
-       //String [] interess = {"Bil","Hest","musikk"," Steinkasting", "Naruto"};
-
-
-        //Henter alle brukere som matcher på alder og kjønn
         try (Connection conn = connect();
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(sql)) {
@@ -90,6 +78,7 @@ public class DatingDB {
 
                 bruker = new Bruker(personID, navn, kjønn, alder, new ArrayList<>(Arrays.asList(splitTabell)), bosted, tlfNr);
                 brukerListe.add(bruker);
+
             }
              }catch(SQLException e){
                 System.out.println(e.getMessage());
@@ -121,8 +110,6 @@ public class DatingDB {
             }
 
             //Sammenligner interessen til bruker og matcher og sorterer utifra hvor mye de matcher.
-
-
     }
 
     //Går igjennom alle matcher sine interesser og gir dem poeng dersom det er en match i interesse.
@@ -131,11 +118,8 @@ public class DatingDB {
         int i = 0;
         ArrayList<String> eierInteresse = new ArrayList<>();
         eierInteresse.addAll(eier.getInterresser());
-
         ArrayList<String> brukerInteresse = new ArrayList<>();
-
         ArrayList<Bruker> nyTabell = new ArrayList<>();
-
 
         for (Bruker b : brukerTabell ) {
             int poeng = 0;
@@ -163,20 +147,10 @@ public class DatingDB {
         }
 
     }
+       
 
-   static public void visNavnOgTlf(int PersonID1, int PersonID2) {
-       String sql = "SELECT Navn, Tlf FROM bruker WHERE PersonID = " + PersonID2;
-
-       try (Connection conn = connect();
-            Statement stmt = conn.createStatement();
-            ResultSet rs = stmt.executeQuery(sql)) {
-           while (rs.next()) {
-               System.out.println(rs.getString("Navn") + "\t" +
-                       rs.getString("Tlf"));
-           }
-       } catch (SQLException e) {
-           System.out.println(e.getMessage());
-       }
+    // Navn og telefonNr til person som bruker liker blir vist
+   static public void oppdaterInteressert(int PersonID1, int PersonID2) {
        String sql2 = "INSERT INTO interessert VALUES (?,?)";
 
        try (Connection conn = connect();
@@ -190,33 +164,98 @@ public class DatingDB {
        }
    }
 
-   static public void visMineUtsendtInfo(int PersonID) {
-        ArrayList<String> bedtomNavn = new ArrayList<String>();
-        String sql = "SELECT bruker_PersonID FROM interessert WHERE likerID = " + PersonID;
+   static public ArrayList<Bruker> interessertIMeg(int PersonID) {
+        ArrayList<Integer> interessert = new ArrayList<>();
 
+        String sql = "SELECT * FROM interessert WHERE likerID = " + PersonID;
 
        try (Connection conn = connect();
             Statement stmt = conn.createStatement();
             ResultSet rs = stmt.executeQuery(sql)) {
            while (rs.next()) {
-               bedtomNavn.add(rs.getString("Bruker_PersonID"));
+               int personID = rs.getInt("PersonID");
+               interessert.add(personID);
            }
-           //System.out.println(bedtomNavn.toString());
+       } catch (SQLException e) {
+           System.out.println(e.getMessage());
+       }
+       String sql2 = "SELECT * from bruker WHERE PersonID = ";
+       int i = 0;
+       for (int ID : interessert) {
+           if (i >= 1)
+               sql2 += " OR PersonID = " + ID;
+           else
+               sql2 += ID;
+           i++;
+       }
+       return brukerFyll(sql2);
+   }
+
+   static public ArrayList<Bruker> mineValg(int PersonID) {
+       ArrayList<Integer> interessert = new ArrayList<>();
+
+       String sql = "SELECT * FROM interessert WHERE bruker_PersonID = " + PersonID;
+
+       try (Connection conn = connect();
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery(sql)) {
+           while (rs.next()) {
+               int likerID = rs.getInt("likerID");
+               interessert.add(likerID);
+           }
+       } catch (SQLException e) {
+           System.out.println(e.getMessage());
+       }
+       String sql2 = "SELECT * from bruker WHERE PersonID = ";
+       int i = 0;
+       for (int ID : interessert) {
+           if (i >= 1)
+               sql2 += " OR PersonID = " + ID;
+           else
+               sql2 += ID;
+           i++;
+       }
+       System.out.println("MineValg");
+       return brukerFyll(sql2);
+   }
+           static public void visMineUtsendtInfo(int PersonID) {
+       Bruker bruker;
+       ArrayList<Bruker> brukerListe = new ArrayList<>();
+
+        String sql = "SELECT * FROM interessert WHERE likerID = " + PersonID;
+
+       try (Connection conn = connect();
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery(sql)) {
+           while (rs.next()) {
+               int personID = rs.getInt("PersonID");
+               String navn = rs.getString("Navn");
+               String kjønn = rs.getString("Kjonn");
+               int alder = rs.getInt("Alder");
+               String interesseTekst = rs.getString("interesser");
+               String bosted = rs.getString("Bosted");
+               String tlfNr = rs.getString("Tlf");
+               int lengde = interesseTekst.length() - 1;
+               String kuttInteresseTekst = interesseTekst.substring(1, lengde);
+               String[] splitTabell = kuttInteresseTekst.split(",");
+
+               bruker = new Bruker(personID, navn, kjønn, alder, new ArrayList<>(Arrays.asList(splitTabell)), bosted, tlfNr);
+               brukerListe.add(bruker);
+           }
        }
        catch (SQLException e) {
            System.out.println(e.getMessage());
        }
 
-       String sql2 = "SELECT PersonID FROM bruker WHERE PersonID = ";
+       String sql2 = "SELECT * FROM bruker WHERE PersonID = ";
         int i = 0;
-               for(String navn : bedtomNavn) {
+               for(Bruker navn : brukerListe) {
                     if (i>= 1)
                         sql2 += " OR PersonID = " + navn;
                     else
                         sql2 += navn;
                    i++;
                }
-               //System.out.println(sql2);
 
        try (Connection conn = connect();
             Statement stmt = conn.createStatement();
@@ -248,5 +287,33 @@ public class DatingDB {
     static public void  selectTableWhere(int personID, String k, ArrayList alder){
        System.out.println("Fant en " + k + " i alder fra " + alder.get(0)+ " - " + alder.get(1)+ " til person " + personID);
     }
+    static ArrayList<Bruker> brukerFyll(String sql) {
+        Bruker bruker;
+        ArrayList<Bruker> brukerListe = new ArrayList<>();
 
+        try (Connection conn = connect();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
+            while (rs.next()) {
+                int personID = rs.getInt("PersonID");
+                String navn = rs.getString("Navn");
+                String kjønn = rs.getString("Kjonn");
+                int alder = rs.getInt("Alder");
+                String interesseTekst = rs.getString("interesser");
+                String bosted = rs.getString("Bosted");
+                String tlfNr = rs.getString("Tlf");
+                int lengde = interesseTekst.length() - 1;
+                String kuttInteresseTekst = interesseTekst.substring(1, lengde);
+                String[] splitTabell = kuttInteresseTekst.split(",");
+
+                bruker = new Bruker(personID, navn, kjønn, alder, new ArrayList<>(Arrays.asList(splitTabell)), bosted, tlfNr);
+                brukerListe.add(bruker);
+            }
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+        }
+        System.out.println("BrukerFyll");
+        return brukerListe;
+    }
 }

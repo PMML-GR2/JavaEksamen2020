@@ -45,7 +45,6 @@ public class RegPane extends VBox {
                         26)
         );
         setStyle(
-                "-fx-background-color: #e6eeff;" +
                         "-fx-spacing: 10"
         );
         getChildren().add(overskrift);
@@ -134,6 +133,7 @@ public class RegPane extends VBox {
         velgBeggeKjonn.setToggleGroup(toggleGroup);
 */
         lagreKnapp = new Button("Lagre!");
+        lagreKnapp.setStyle("-fx-background-color:#ce93a2;");
         getChildren().add(lagreKnapp);
 
     }
