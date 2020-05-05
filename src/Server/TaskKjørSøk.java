@@ -9,7 +9,7 @@ import java.net.Socket;
 import java.util.ArrayList;
 
 public class TaskKjørSøk implements Runnable {
-    char kjønn;
+    String kjønn;
     ArrayList<Integer> alder = new ArrayList<>();
     int personID;
 
@@ -35,7 +35,7 @@ public class TaskKjørSøk implements Runnable {
                 utTekst = new DataOutputStream(socket.getOutputStream());
 
                 //Skriv til klienten
-                kjønn = innTekst.readChar();
+                kjønn = innTekst.readUTF();
                 personID = innTekst.readInt();
                 minAlder = innTekst.readInt();
                 maxAlder = innTekst.readInt();
