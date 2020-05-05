@@ -13,6 +13,8 @@ public class TaskNavnOgTlf implements Runnable {
     int VisID;
     ArrayList<String> navnOgTlf = new ArrayList<String>();
 
+
+
     String Navn = "";
     String Tlf = "";
 
@@ -42,8 +44,6 @@ public class TaskNavnOgTlf implements Runnable {
             navnOgTlf.add(DatingDB.visNavnOgTlf(SpørrID, VisID).toString());
 
             Navn = navnOgTlf.get(0);
-
-
 
 
 
