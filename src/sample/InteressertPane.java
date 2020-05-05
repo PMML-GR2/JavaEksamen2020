@@ -35,8 +35,8 @@ public class InteressertPane extends BorderPane {
         setPadding(new Insets(20, 5, 20, 100));
         setTop(overskrift);
 
-        //SøkerBox med Innhold
-        imageView2 = new ImageView(new Image("https://cdn0.iconfinder.com/data/icons/twitter-24/512/166_Heart_Love_Like_Twitter-512.png"));
+
+        imageView2 = new ImageView(new Image("https://cdn4.iconfinder.com/data/icons/momenticons-basic/32x32/favorites2-add.png"));
         imageView2.setFitHeight(25.0);
         imageView2.setFitWidth(25.0);
         profilHjerteknapp = new Button("  ",imageView2);

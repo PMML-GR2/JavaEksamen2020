@@ -77,7 +77,9 @@ public class SokePane extends BorderPane {
         imageView1.setFitHeight(25.0);
         imageView1.setFitWidth(25.0);
         sokKnapp = new Button("Finn kjærligheten", imageView1);
+        sokKnapp.setStyle("-fx-background-color:#ce93a2;");
         sokfelt5.setPadding(new Insets(40,0,8,0));
+
 
 
         sokfelt1.getChildren().addAll(sokKjonntxt);

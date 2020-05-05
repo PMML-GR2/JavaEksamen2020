@@ -68,6 +68,7 @@ public class Main extends Application {
 
 
         mainPane = new BorderPane();
+        mainPane.setStyle("-fx-background-color:#ededed;");
         //mainPane.setPadding(new Insets(10, 10, 10, 10));
         menu = new HBox();
         profilKnapp();
@@ -82,7 +83,7 @@ public class Main extends Application {
                         22)
         );
         menu.getChildren().addAll(appNavn, registrerKnapp, minProfil, finnMatch, mineMatcher, interesserte);
-        menu.setStyle("-fx-background-color:#ED85AD;");
+        menu.setStyle("-fx-background-color:#ce93a2;");
         menu.setPadding(new Insets(20, 10, 20, 10));
 
 
