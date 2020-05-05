@@ -1,12 +1,9 @@
 package Server;
 
-import Felles.Handling;
 import sample.Bruker;
 
 import java.io.DataInputStream;
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.lang.reflect.Array;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -27,9 +24,9 @@ public class Server {
 
         TaskKjørSøk kjørSøk;
         TaskRegistrerBruker regBruker;
-        TaskNavnOgTlf visMatch;
+        TaskHentValg visMatch;
 
-        //DatingDB.visNavnOgTlf(10,13);
+        //DatingDB.visMineUtsendtInfo(11);
         //ArrayList<String> test = new ArrayList<>();
         //test.add(DatingDB.visNavnOgTlf(10,13).toString());
         //System.out.println(DatingDB.visNavnOgTlf(10, 13).toString());
@@ -59,7 +56,7 @@ public class Server {
                         break;
                     case "INTERESSERT":
                         System.out.println("Interessert");
-                        visMatch = new TaskNavnOgTlf(socket);
+                        visMatch = new TaskHentValg(socket);
                         visMatch.run();
                         break;
                     case "LOGGINN":
