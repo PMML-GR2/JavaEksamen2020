@@ -27,6 +27,7 @@ public class Server {
         TaskRegistrerBruker regBruker;
 
         //Lytter og venter på at noen skal koble seg til å lage ny bruker
+
         try{
             while(true) {
                 Socket socket = serverSocket.accept();
@@ -69,6 +70,7 @@ public class Server {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
         return serverSocket;
     }
 }
