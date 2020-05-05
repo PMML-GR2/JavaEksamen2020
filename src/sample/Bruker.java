@@ -13,6 +13,10 @@ public class Bruker implements Comparable{
     private String tlfNr;
     private int poengSum;
 
+
+   
+
+
     public Bruker(int personID, String fornavn, String kjonn, int alder, ArrayList interresser, String bosted, String tlfNr) {
         this.personID = personID;
         this.fornavn = fornavn;
@@ -30,6 +34,7 @@ public class Bruker implements Comparable{
 
     public void setPersonID(int personID) {
         this.personID = personID;
+
     }
 
     public String getFornavn() {

@@ -67,7 +67,7 @@ public class Main extends Application {
 
 
         mainPane = new BorderPane();
-        mainPane.setPadding(new Insets(10, 10, 10, 10));
+        //mainPane.setPadding(new Insets(10, 10, 10, 10));
         menu = new HBox();
         profilKnapp();
         registrerKnapp();
@@ -75,18 +75,23 @@ public class Main extends Application {
         mineMatcherKnapp();
         intImegKnapp();
         appNavn = new Label("DateMe");
-        appNavn.setPadding(new Insets(0,10,0,0));
+        appNavn.setPadding(new Insets(5,20,0,0));
         appNavn.setFont(
                 Font.font("Verdana",
                         22)
         );
         menu.getChildren().addAll(appNavn, registrerKnapp, minProfil, finnMatch, mineMatcher, interesserte);
+        menu.setStyle("-fx-background-color:#ED85AD;");
+        menu.setPadding(new Insets(20, 10, 20, 10));
+
 
         mainPane.setTop(menu);
 
 
         regPane = new RegPane();
+        profilePane = new ProfilePane();
         matchPane = new MatchPane();
+
 
 
         primaryStage.setTitle("Registrering");
