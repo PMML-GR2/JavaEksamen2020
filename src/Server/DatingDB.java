@@ -54,9 +54,13 @@ public class DatingDB {
 
     return persID;
    }
+
+
+
+
    static public ArrayList<String> visNavnOgTlf(int PersonID1, int PersonID2) {
         ArrayList<String> NavnOgTlf = new ArrayList<String>();
-       String sql = "SELECT Navn, Tlf FROM bruker WHERE PersonID = " + PersonID2;
+       String sql = "SELECT * FROM bruker WHERE PersonID = " + PersonID2;
 
        try (Connection conn = connect();
             Statement stmt = conn.createStatement();

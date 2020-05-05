@@ -1,5 +1,7 @@
 package Server;
 
+import sample.Bruker;
+
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -12,6 +14,7 @@ public class TaskNavnOgTlf implements Runnable {
     int SpørrID;
     int VisID;
     ArrayList<String> navnOgTlf = new ArrayList<String>();
+    ArrayList<Bruker> brukerListe = new ArrayList<>();
 
 
 
