@@ -27,25 +27,11 @@ public class DatingDB {
 */
 
         int persID = 0;
-
+      
         String sql = "INSERT INTO bruker(Navn, Kjonn, Alder, Interesser, Bosted, Tlf) VALUES (?,?,?,?,?,?)";
 
         try (Connection conn = connect();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setString(1, navn);
-            pstmt.setString(2, kjonn);
-            pstmt.setInt(3, alder);
-            pstmt.setString(4, String.valueOf(interesser));
-            pstmt.setString(5, bosted);
-            pstmt.setString(6, tlf);
-            pstmt.executeUpdate();
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
-
-        String sql2 = "INSERT INTO bruker(Navn, Kjonn, Alder, Interesser, Bosted, Tlf) VALUES (?,?,?,?,?,?)";
-        try (Connection conn = connect();
-             PreparedStatement pstmt = conn.prepareStatement(sql2)) {
             pstmt.setString(1, navn);
             pstmt.setString(2, kjonn);
             pstmt.setInt(3, alder);
@@ -212,15 +198,24 @@ public class DatingDB {
         //System.out.println(b.getPoengSum());
     }
 
-   static public void visNavnOgTlf(int PersonID1, int PersonID2) {
-       String sql = "SELECT Navn, Tlf FROM bruker WHERE PersonID = " + PersonID2;
+    return persID;
+   }
+
+
+
+
+   static public ArrayList<String> visNavnOgTlf(int PersonID1, int PersonID2) {
+        ArrayList<String> NavnOgTlf = new ArrayList<String>();
+       String sql = "SELECT * FROM bruker WHERE PersonID = " + PersonID2;
 
        try (Connection conn = connect();
             Statement stmt = conn.createStatement();
             ResultSet rs = stmt.executeQuery(sql)) {
            while (rs.next()) {
-               System.out.println(rs.getString("Navn") + "\t" +
-                       rs.getString("Tlf"));
+               NavnOgTlf.add(rs.getString("Navn"));
+               NavnOgTlf.add(rs.getString("Tlf"));
+               //System.out.println(rs.getString("Navn") + "\t" +
+                 //      rs.getString("Tlf"));
            }
        } catch (SQLException e) {
            System.out.println(e.getMessage());
@@ -236,7 +231,9 @@ public class DatingDB {
        catch (SQLException e) {
            System.out.println(e.getMessage());
        }
+       return NavnOgTlf;
    }
+
 
    static public void visMineUtsendtInfo(int PersonID) {
         ArrayList<String> bedtomNavn = new ArrayList<String>();

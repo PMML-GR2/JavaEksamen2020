@@ -28,10 +28,16 @@ public class Server {
 
         TaskKjørSøk kjørSøk;
         TaskRegistrerBruker regBruker;
+        TaskNavnOgTlf visMatch;
 
-        DatingDB.søkMatch(5,"M",1, 70);
+        //DatingDB.visNavnOgTlf(10,13);
+        //ArrayList<String> test = new ArrayList<>();
+        //test.add(DatingDB.visNavnOgTlf(10,13).toString());
+        System.out.println(DatingDB.visNavnOgTlf(10,13).toString());
+
+
         //Lytter og venter på at noen skal koble seg til å lage ny bruker
-
+/*
         try{
             while(true) {
                 Socket socket = serverSocket.accept();
@@ -55,14 +61,17 @@ public class Server {
                         break;
                     case "INTERESSERT":
                         System.out.println("Interessert");
+                        visMatch = new TaskNavnOgTlf(socket);
+                        visMatch.run();
                         break;
                     case "LOGGINN":
                         System.out.println("Logg Inn Id: " + innTekst.readInt());
                         break;
                 }
             }
+
                  }catch (IOException ex){ex.printStackTrace();}
-        
+
     }
 
 
