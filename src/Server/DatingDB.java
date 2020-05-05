@@ -25,7 +25,24 @@ public class DatingDB {
            System.out.println(s);
        }
 */
-        int persID = 0;
+
+      int persID = 0;
+
+       String sql = "INSERT INTO bruker(Navn, Kjonn, Alder, Interesser, Bosted, Tlf) VALUES (?,?,?,?,?,?)";
+
+       try (Connection conn = connect();
+            PreparedStatement pstmt = conn.prepareStatement(sql)) {
+           pstmt.setString(1, navn);
+           pstmt.setString(2, kjonn);
+           pstmt.setInt(3, alder);
+           pstmt.setString(4, String.valueOf(interesser));
+           pstmt.setString(5, bosted);
+           pstmt.setString(6, tlf);
+           pstmt.executeUpdate();
+       } catch (SQLException e) {
+           System.out.println(e.getMessage());
+       }
+
 
         String sql = "INSERT INTO bruker(Navn, Kjonn, Alder, Interesser, Bosted, Tlf) VALUES (?,?,?,?,?,?)";
         try (Connection conn = connect();
@@ -101,6 +118,7 @@ public class DatingDB {
 
             //Sammenligner interessen til bruker og matcher og sorterer utifra hvor mye de matcher.
             sammenligneInteresser(brukerListe, eier);
+
 
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -195,6 +213,73 @@ public class DatingDB {
         //System.out.println(b.getPoengSum());
     }
 
+   }
+   static public void visNavnOgTlf(int PersonID1, int PersonID2) {
+       String sql = "SELECT Navn, Tlf FROM bruker WHERE PersonID = " + PersonID2;
+
+       try (Connection conn = connect();
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery(sql)) {
+           while (rs.next()) {
+               System.out.println(rs.getString("Navn") + "\t" +
+                       rs.getString("Tlf"));
+           }
+       } catch (SQLException e) {
+           System.out.println(e.getMessage());
+       }
+       String sql2 = "INSERT INTO interessert VALUES (?,?)";
+
+       try (Connection conn = connect();
+            PreparedStatement pstmt = conn.prepareStatement(sql2)) {
+           pstmt.setInt(1, PersonID1);
+           pstmt.setInt(2, PersonID2);
+           pstmt.executeUpdate();
+       }
+       catch (SQLException e) {
+           System.out.println(e.getMessage());
+       }
+   }
+
+   static public void visMineUtsendtInfo(int PersonID) {
+        ArrayList<String> bedtomNavn = new ArrayList<String>();
+        String sql = "SELECT bruker_PersonID FROM interessert WHERE likerID = " + PersonID;
+
+
+       try (Connection conn = connect();
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery(sql)) {
+           while (rs.next()) {
+               bedtomNavn.add(rs.getString("Bruker_PersonID"));
+           }
+           //System.out.println(bedtomNavn.toString());
+       }
+       catch (SQLException e) {
+           System.out.println(e.getMessage());
+       }
+
+       String sql2 = "SELECT PersonID FROM bruker WHERE PersonID = ";
+        int i = 0;
+               for(String navn : bedtomNavn) {
+                    if (i>= 1)
+                        sql2 += " OR PersonID = " + navn;
+                    else
+                        sql2 += navn;
+                   i++;
+               }
+               //System.out.println(sql2);
+
+       try (Connection conn = connect();
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery(sql2)) {
+           while (rs.next()) {
+               System.out.println(rs.getString("PersonID"));
+           }
+       }
+       catch (SQLException e) {
+           System.out.println(e.getMessage());
+       }
+   }
+  
    static public void visInteresser() {
         String sql = "SELECT Interesser FROM bruker";
 
@@ -213,4 +298,5 @@ public class DatingDB {
     static public void  selectTableWhere(int personID, String k, ArrayList alder){
        System.out.println("Fant en " + k + " i alder fra " + alder.get(0)+ " - " + alder.get(1)+ " til person " + personID);
     }
+
 }

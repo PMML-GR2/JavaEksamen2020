@@ -31,7 +31,7 @@ public class Server {
 
         DatingDB.søkMatch(5,"M",1, 70);
         //Lytter og venter på at noen skal koble seg til å lage ny bruker
-        /*
+
         try{
             while(true) {
                 Socket socket = serverSocket.accept();
@@ -62,7 +62,7 @@ public class Server {
                 }
             }
                  }catch (IOException ex){ex.printStackTrace();}
-        */
+        
     }
 
 
@@ -75,6 +75,7 @@ public class Server {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
         return serverSocket;
     }
 }
