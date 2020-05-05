@@ -5,28 +5,25 @@ import sample.Bruker;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.lang.reflect.Array;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Collections;
 
-public class TaskNavnOgTlf implements Runnable {
+public class TaskHentValg implements Runnable {
     int SpørrID;
     int VisID;
-    ArrayList<String> navnOgTlf = new ArrayList<String>();
     ArrayList<Bruker> brukerListe = new ArrayList<>();
-
-
-
-    String Navn = "";
-    String Tlf = "";
 
 
     Socket socket;
     DataInputStream innTekst = null;
     DataOutputStream utTekst = null;
+    ObjectOutputStream outObject = null;
 
-    public TaskNavnOgTlf(Socket socket){
+    public TaskHentValg(Socket socket){
         this.socket = socket;
     }
 
@@ -38,20 +35,17 @@ public class TaskNavnOgTlf implements Runnable {
             //Lag dataOutput til klient
             innTekst = new DataInputStream(socket.getInputStream());
             utTekst = new DataOutputStream(socket.getOutputStream());
+            outObject = new ObjectOutputStream(socket.getOutputStream());
 
             SpørrID = innTekst.readInt();
             VisID = innTekst.readInt();
 
-            //DatingDB.visNavnOgTlf(SpørrID,VisID);
+            brukerListe = DatingDB.mineValg(SpørrID);
+            DatingDB.oppdaterInteressert(SpørrID, VisID);
 
-            navnOgTlf.add(DatingDB.visNavnOgTlf(SpørrID, VisID).toString());
-
-            Navn = navnOgTlf.get(0);
-
-
-
-
-
+            outObject.writeObject(brukerListe);
+            System.out.println("TASK");
+            System.out.println(brukerListe);
 
         } catch (IOException e) {
             e.printStackTrace();
