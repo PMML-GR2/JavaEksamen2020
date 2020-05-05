@@ -26,27 +26,26 @@ public class DatingDB {
        }
 */
 
-      int persID = 0;
-
-       String sql = "INSERT INTO bruker(Navn, Kjonn, Alder, Interesser, Bosted, Tlf) VALUES (?,?,?,?,?,?)";
-
-       try (Connection conn = connect();
-            PreparedStatement pstmt = conn.prepareStatement(sql)) {
-           pstmt.setString(1, navn);
-           pstmt.setString(2, kjonn);
-           pstmt.setInt(3, alder);
-           pstmt.setString(4, String.valueOf(interesser));
-           pstmt.setString(5, bosted);
-           pstmt.setString(6, tlf);
-           pstmt.executeUpdate();
-       } catch (SQLException e) {
-           System.out.println(e.getMessage());
-       }
-
+        int persID = 0;
 
         String sql = "INSERT INTO bruker(Navn, Kjonn, Alder, Interesser, Bosted, Tlf) VALUES (?,?,?,?,?,?)";
+
         try (Connection conn = connect();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, navn);
+            pstmt.setString(2, kjonn);
+            pstmt.setInt(3, alder);
+            pstmt.setString(4, String.valueOf(interesser));
+            pstmt.setString(5, bosted);
+            pstmt.setString(6, tlf);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+
+        String sql2 = "INSERT INTO bruker(Navn, Kjonn, Alder, Interesser, Bosted, Tlf) VALUES (?,?,?,?,?,?)";
+        try (Connection conn = connect();
+             PreparedStatement pstmt = conn.prepareStatement(sql2)) {
             pstmt.setString(1, navn);
             pstmt.setString(2, kjonn);
             pstmt.setInt(3, alder);
@@ -213,7 +212,6 @@ public class DatingDB {
         //System.out.println(b.getPoengSum());
     }
 
-   }
    static public void visNavnOgTlf(int PersonID1, int PersonID2) {
        String sql = "SELECT Navn, Tlf FROM bruker WHERE PersonID = " + PersonID2;
 
