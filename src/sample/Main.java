@@ -10,7 +10,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 
 public class Main extends Application {
@@ -32,9 +31,10 @@ public class Main extends Application {
     private HBox menu;
 
 
-    private MatchPane matchPane;
     private RegPane regPane;
     private ProfilePane profilePane;
+    private InteressertPane interessertPane;
+    private FinnMatchPane finnMatchPane;
 
     public static void main(String[] args) {
 
@@ -67,6 +67,7 @@ public class Main extends Application {
 
 
         mainPane = new BorderPane();
+        mainPane.setStyle("-fx-background-color:#ededed;");
         //mainPane.setPadding(new Insets(10, 10, 10, 10));
         menu = new HBox();
         profilKnapp();
@@ -81,18 +82,17 @@ public class Main extends Application {
                         22)
         );
         menu.getChildren().addAll(appNavn, registrerKnapp, minProfil, finnMatch, mineMatcher, interesserte);
-        menu.setStyle("-fx-background-color:#ED85AD;");
+        menu.setStyle("-fx-background-color:#ce93a2;");
         menu.setPadding(new Insets(20, 10, 20, 10));
 
 
         mainPane.setTop(menu);
-
-
+      
         regPane = new RegPane();
+        interessertPane = new InteressertPane();
+        finnMatchPane = new FinnMatchPane();
         profilePane = new ProfilePane();
-        matchPane = new MatchPane();
-
-
+       
 
         primaryStage.setTitle("Registrering");
         primaryStage.setScene(new Scene(mainPane, 750, 850));
@@ -103,7 +103,6 @@ public class Main extends Application {
     private void registrerKnapp() {
         registrerKnapp = new Button("Registrering", imageView);
         registrerKnapp.setPadding(new Insets(2, 4, 2, 4));
-        registrerKnapp.setMaxSize(300, 200);
         registrerKnapp.setStyle("-fx-background-color:transparent;");
         registrerKnapp.setOnAction(event -> {
             primaryStage.setTitle("Registrering");
@@ -114,7 +113,6 @@ public class Main extends Application {
     private void profilKnapp() {
         minProfil = new Button("Min profil", imageView0);
         minProfil.setPadding(new Insets(2, 4, 2, 4));
-        minProfil.setMaxSize(300, 200);
         minProfil.setStyle("-fx-background-color:transparent;");
         minProfil.setOnAction(event -> {
             primaryStage.setTitle("Min profil");
@@ -127,11 +125,10 @@ public class Main extends Application {
 
         finnMatch = new Button("Finn match", imageView1);
         finnMatch.setPadding(new Insets(2, 4, 2, 4));
-        finnMatch.setMaxSize(300, 200);
         finnMatch.setStyle("-fx-background-color:transparent;");
         finnMatch.setOnAction(event -> {
             primaryStage.setTitle("Finn match");
-            mainPane.setCenter(matchPane);
+            mainPane.setCenter(finnMatchPane);
         });
 
     }
@@ -139,22 +136,20 @@ public class Main extends Application {
     private void mineMatcherKnapp() {
         mineMatcher = new Button("Mine matcher", imageView2);
         mineMatcher.setPadding(new Insets(2, 4, 2, 4));
-        mineMatcher.setMaxSize(300, 200);
         mineMatcher.setStyle("-fx-background-color:transparent;");
         mineMatcher.setOnAction(event -> {
             primaryStage.setTitle("Matchet med meg");
-            mainPane.setCenter(matchPane);
+            mainPane.setCenter(interessertPane);
         });
     }
 
     private void intImegKnapp() {
         interesserte = new Button("Interessert i meg", imageView3);
         interesserte.setPadding(new Insets(2, 4, 2, 4));
-        interesserte.setMaxSize(300, 200);
         interesserte.setStyle("-fx-background-color:transparent;");
         interesserte.setOnAction(event -> {
             primaryStage.setTitle("interessert i meg");
-            mainPane.setCenter(matchPane);
+            mainPane.setCenter(interessertPane);
         });
     }
 }

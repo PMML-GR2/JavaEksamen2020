@@ -1,8 +1,9 @@
 package sample;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Bruker implements Comparable{
+public class Bruker implements Comparable, Serializable {
     int personID;
     private String fornavn;
     private String etternavn;
@@ -14,7 +15,10 @@ public class Bruker implements Comparable{
     private int poengSum;
 
 
-   
+
+    public Bruker () {
+
+    }
 
 
     public Bruker(int personID, String fornavn, String kjonn, int alder, ArrayList interresser, String bosted, String tlfNr) {
