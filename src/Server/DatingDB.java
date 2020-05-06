@@ -46,18 +46,15 @@ public class DatingDB {
         return persID;
     }
 
-    static public void søkMatch(int PersonID, String kjonn, int minAlder, int maxAlder) {
+    static public ArrayList<Bruker> søkMatch(int PersonID, String kjonn, int minAlder, int maxAlder) {
         //Finn brukere
         String sql = "SELECT * FROM bruker "
                 + "WHERE Kjonn = " + "'" + kjonn + "'"
                 + " AND Alder BETWEEN " + minAlder + " AND " + maxAlder + " AND PersonID <> " + PersonID
                 + " LIMIT 10;";
 
-
         ArrayList<Bruker> brukerListe = new ArrayList<>();
-        Bruker bruker;
-
-        Bruker eier;
+        Bruker eier = minProfil(PersonID);
 
         try (Connection conn = connect();
              Statement stmt = conn.createStatement();
@@ -75,38 +72,13 @@ public class DatingDB {
                 String kuttInteresseTekst = interesseTekst.substring(1, lengde);
                 String[] splitTabell = kuttInteresseTekst.split(",");
 
-                bruker = new Bruker(personID, navn, kjønn, alder, new ArrayList<>(Arrays.asList(splitTabell)), bosted, tlfNr);
-                brukerListe.add(bruker);
-
+                brukerListe.add(new Bruker(personID, navn, kjønn, alder, new ArrayList<>(Arrays.asList(splitTabell)), bosted, tlfNr));
             }
              }catch(SQLException e){
                 System.out.println(e.getMessage());
             }
 
-       String sql2 = "SELECT * FROM Bruker WHERE PersonID = " + PersonID;
-
-            try (Connection conn = connect();
-                 Statement stmt = conn.createStatement();
-                 ResultSet rs = stmt.executeQuery(sql2)) {
-                while (rs.next()) {
-                    //Henter all brukerinfoen og legger dem inn i brukertabellen.
-                    int personID = rs.getInt("PersonID");
-                    String navn = rs.getString("Navn");
-                    String kjønn = rs.getString("Kjonn");
-                    int alder = rs.getInt("Alder");
-                    String interesseTekst = rs.getString("interesser");
-                    String bosted = rs.getString("Bosted");
-                    String tlfNr = rs.getString("Tlf");
-                    int lengde = interesseTekst.length() - 1;
-                    String kuttInteresseTekst = interesseTekst.substring(1, lengde);
-                    String[] splitTabell = kuttInteresseTekst.split(",");
-
-                    eier = new Bruker(personID, navn, kjønn, alder, new ArrayList<>(Arrays.asList(splitTabell)), bosted,tlfNr);
-                    sammenligneInteresser(brukerListe, eier);
-                }
-            } catch (SQLException e) {
-                System.out.println(e.getMessage());
-            }
+                    return sammenligneInteresser(brukerListe, eier);
 
             //Sammenligner interessen til bruker og matcher og sorterer utifra hvor mye de matcher.
     }
@@ -140,7 +112,8 @@ public class DatingDB {
         return innloggetBruker;
 
     }
-    static public void sammenligneInteresser(ArrayList<Bruker> brukerTabell, Bruker eier) {
+
+    static public ArrayList<Bruker> sammenligneInteresser(ArrayList<Bruker> brukerTabell, Bruker eier) {
         int i = 0;
         ArrayList<String> eierInteresse = new ArrayList<>();
         eierInteresse.addAll(eier.getInterresser());
@@ -172,6 +145,8 @@ public class DatingDB {
             System.out.println(b.getPersonID() + ": " + b.getPoengSum() + " " + b.getFornavn());
         }
 
+        return nyTabell;
+
     }
        
 
@@ -190,6 +165,7 @@ public class DatingDB {
        }
    }
 
+   //Skriver ut alle som liker meg
    static public ArrayList<Bruker> interessertIMeg(int PersonID) {
         ArrayList<Integer> interessert = new ArrayList<>();
 
@@ -246,76 +222,6 @@ public class DatingDB {
        System.out.println(sql2);
        return brukerFyll(sql2);
    }
-           static public void visMineUtsendtInfo(int PersonID) {
-       Bruker bruker;
-       ArrayList<Bruker> brukerListe = new ArrayList<>();
-
-        String sql = "SELECT * FROM interessert WHERE likerID = " + PersonID;
-
-       try (Connection conn = connect();
-            Statement stmt = conn.createStatement();
-            ResultSet rs = stmt.executeQuery(sql)) {
-           while (rs.next()) {
-               int personID = rs.getInt("PersonID");
-               String navn = rs.getString("Navn");
-               String kjønn = rs.getString("Kjonn");
-               int alder = rs.getInt("Alder");
-               String interesseTekst = rs.getString("interesser");
-               String bosted = rs.getString("Bosted");
-               String tlfNr = rs.getString("Tlf");
-               int lengde = interesseTekst.length() - 1;
-               String kuttInteresseTekst = interesseTekst.substring(1, lengde);
-               String[] splitTabell = kuttInteresseTekst.split(",");
-
-               bruker = new Bruker(personID, navn, kjønn, alder, new ArrayList<>(Arrays.asList(splitTabell)), bosted, tlfNr);
-               brukerListe.add(bruker);
-           }
-       }
-       catch (SQLException e) {
-           System.out.println(e.getMessage());
-       }
-
-       String sql2 = "SELECT * FROM bruker WHERE PersonID = ";
-        int i = 0;
-               for(Bruker navn : brukerListe) {
-                    if (i>= 1)
-                        sql2 += " OR PersonID = " + navn;
-                    else
-                        sql2 += navn;
-                   i++;
-               }
-
-       try (Connection conn = connect();
-            Statement stmt = conn.createStatement();
-            ResultSet rs = stmt.executeQuery(sql2)) {
-           while (rs.next()) {
-               System.out.println(rs.getString("PersonID"));
-           }
-       }
-       catch (SQLException e) {
-           System.out.println(e.getMessage());
-       }
-   }
-  
-   static public void visInteresser() {
-        String sql = "SELECT Interesser FROM bruker";
-
-        try (Connection conn = connect();
-            Statement stmt = conn.createStatement();
-            ResultSet rs = stmt.executeQuery(sql)) {
-            while (rs.next()) {
-                System.out.println(rs.getString("Interesser"));
-            }
-        }
-        catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
-    }
-
-    static public void  selectTableWhere(int personID, String k, ArrayList alder){
-       System.out.println("Fant en " + k + " i alder fra " + alder.get(0)+ " - " + alder.get(1)+ " til person " + personID);
-    }
-
 
     //Hjelpemetode for å skrive ut alle brukere som har fulgt en kriterie laget utenfor
     static ArrayList<Bruker> brukerFyll(String sql) {

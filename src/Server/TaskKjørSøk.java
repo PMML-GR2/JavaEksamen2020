@@ -17,6 +17,7 @@ public class TaskKjørSøk implements Runnable {
    Socket socket;
     DataInputStream innTekst = null;
     DataOutputStream utTekst = null;
+    ArrayList<Bruker>
 
     public TaskKjørSøk(Socket socket){
         this.socket = socket;
@@ -39,6 +40,7 @@ public class TaskKjørSøk implements Runnable {
                 maxAlder = innTekst.readInt();
                 System.out.println(kjønn + " " +personID + " " + minAlder + " " + maxAlder);
                 DatingDB.søkMatch(personID,kjønn,minAlder,maxAlder);
+
 
         } catch (IOException e) {
             e.printStackTrace();
