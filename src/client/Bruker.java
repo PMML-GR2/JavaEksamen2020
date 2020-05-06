@@ -14,6 +14,18 @@ public class Bruker implements Comparable, Serializable {
     private String tlfNr;
     private int poengSum;
 
+    public Bruker() {
+
+    }
+
+    public Bruker(int personID, String fulltNavn, String kjonn, int alder, ArrayList interresser) {
+        this.personID = personID;
+        this.fulltNavn = fulltNavn;
+        this.kjonn = kjonn;
+        this.alder = alder;
+        this.interresser = interresser;
+    }
+
 
     public Bruker(int personID, String fulltNavn, String kjonn, int alder, ArrayList interresser, String bosted, String tlfNr) {
         this.personID = personID;
@@ -23,9 +35,6 @@ public class Bruker implements Comparable, Serializable {
         this.interresser = interresser;
         this.bosted = bosted;
         this.tlfNr = tlfNr;
-    }
-
-    public Bruker() {
     }
 
     public int getPersonID() {
@@ -44,7 +53,6 @@ public class Bruker implements Comparable, Serializable {
     public void setFulltNavn(String fulltNavn) {
         this.fulltNavn = fulltNavn;
     }
-
 
     public String getKjonn() {
         return kjonn;
@@ -109,10 +117,10 @@ public class Bruker implements Comparable, Serializable {
 
     @Override
     public int compareTo(Object o) {
-        Bruker bruker2 = (Bruker)o;
-        if(poengSum > bruker2.getPoengSum()){
+        Bruker bruker2 = (Bruker) o;
+        if (poengSum > bruker2.getPoengSum()) {
             return 1;
-        }else if(poengSum == bruker2.getPoengSum()){
+        } else if (poengSum == bruker2.getPoengSum()) {
             return 0;
         }
         return -1;

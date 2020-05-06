@@ -1,22 +1,25 @@
 package Server;
 
+import sample.Bruker;
+
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.lang.reflect.Array;
-import java.net.ServerSocket;
+import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
 
+//Denne klassen tar seg av å søke etter matcher til den innloggede brukeren
 public class TaskKjørSøk implements Runnable {
     String kjønn;
     int minAlder;
     int maxAlder;
     int personID;
+    ArrayList<Bruker> brukerListe = new ArrayList<>();
 
-   Socket socket;
+    Socket socket;
     DataInputStream innTekst = null;
-    DataOutputStream utTekst = null;
+    ObjectOutputStream utObject = null;
 
     public TaskKjørSøk(Socket socket){
         this.socket = socket;
@@ -24,13 +27,11 @@ public class TaskKjørSøk implements Runnable {
 
     @Override
     public void run() {
-
         try {
                 System.out.println("Bruker gjør ett søk");
 
                 //Lag dataOutput til klient
                 innTekst = new DataInputStream(socket.getInputStream());
-                utTekst = new DataOutputStream(socket.getOutputStream());
 
                 //Hent fra klienten
                 kjønn = innTekst.readUTF();
@@ -38,21 +39,26 @@ public class TaskKjørSøk implements Runnable {
                 minAlder = innTekst.readInt();
                 maxAlder = innTekst.readInt();
                 System.out.println(kjønn + " " +personID + " " + minAlder + " " + maxAlder);
-                DatingDB.søkMatch(personID,kjønn,minAlder,maxAlder);
 
-        } catch (IOException e) {
+                brukerListe.addAll(DatingDB.søkMatch(personID,kjønn,minAlder,maxAlder));
+
+                System.out.println("Ble jeg ferdig? : " + brukerListe);
+                utObject = new ObjectOutputStream(socket.getOutputStream());
+
+                utObject.writeObject(brukerListe);
+
+        }
+        catch (IOException e) {
             e.printStackTrace();
-        } finally {
+        }
+        finally {
             try {
-                utTekst.close();
+                utObject.close();
                 innTekst.close();
-            } catch (IOException e) {
+            }
+            catch (IOException e) {
                 e.printStackTrace();
             }
         }
-
-
     }
-
-
 }

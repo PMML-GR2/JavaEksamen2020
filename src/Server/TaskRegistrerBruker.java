@@ -3,10 +3,11 @@ package Server;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 
+
+//Denne klassen tar seg av read og write når en bruker skal registrere seg
 public class TaskRegistrerBruker implements Runnable{
     //InnVariabler til registrering
     String navn;
@@ -28,7 +29,6 @@ public class TaskRegistrerBruker implements Runnable{
     @Override
     public void run() {
         try {
-
                 //bruker til å splitte interesse tekst
                 String fangOppString;
 
@@ -49,19 +49,18 @@ public class TaskRegistrerBruker implements Runnable{
                 for(String s: splitTabell){
                     interesser.add(s);
                 }
-
-
                 utTekst.writeInt(DatingDB.registrerBruker(navn,k,alder,interesser,bosted,tlf));
-
                 System.out.println("En bruker er registrert");
-
-        } catch (IOException e) {
+        }
+        catch (IOException e) {
             e.printStackTrace();
-        } finally {
+        }
+        finally {
             try {
                 innTekst.close();
                 utTekst.close();
-            } catch (IOException e) {
+            }
+            catch (IOException e) {
                 e.printStackTrace();
             }
         }

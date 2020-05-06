@@ -1,24 +1,22 @@
 package Server;
 
-import client.Bruker;
-
+import sample.Bruker;
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
 
-//Skriver ut alle brukere som innlogget bruker er interessert i
-public class TaskHentValg implements Runnable {
-    int SpørrID;
-    int VisID;
+//skriver ut alle brukere i systemet som har trykket seg innteressert i innlogget bruker
+public class TaskHentInteresserte implements Runnable {
+    int personID;
     ArrayList<Bruker> brukerListe = new ArrayList<>();
 
     Socket socket;
     DataInputStream innTekst = null;
     ObjectOutputStream outObject = null;
 
-    public TaskHentValg(Socket socket){
+    public TaskHentInteresserte(Socket socket){
         this.socket = socket;
     }
 
@@ -29,13 +27,10 @@ public class TaskHentValg implements Runnable {
             innTekst = new DataInputStream(socket.getInputStream());
             outObject = new ObjectOutputStream(socket.getOutputStream());
 
-            SpørrID = innTekst.readInt();
-            VisID = innTekst.readInt();
+            personID = innTekst.readInt();
 
-            //Legger inn interessert forholdet mellom brukere
-            DatingDB.oppdaterInteressert(SpørrID, VisID);
             //Skriver ut alle brukere som er lagret i db som interresant.
-            brukerListe = DatingDB.mineValg(SpørrID);
+            brukerListe = DatingDB.interessertIMeg(personID);
             outObject.writeObject(brukerListe);
         }
         catch (IOException e) {
