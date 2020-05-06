@@ -13,11 +13,11 @@ public class TaskKjørSøk implements Runnable {
     int minAlder;
     int maxAlder;
     int personID;
-    ArrayList<Bruker> brukerListe;
+    ArrayList<Bruker> brukerListe = new ArrayList<>();
 
     Socket socket;
     DataInputStream innTekst = null;
-    DataOutputStream utTekst = null;
+    ObjectOutputStream utObject = null;
 
     public TaskKjørSøk(Socket socket){
         this.socket = socket;
@@ -30,7 +30,6 @@ public class TaskKjørSøk implements Runnable {
 
                 //Lag dataOutput til klient
                 innTekst = new DataInputStream(socket.getInputStream());
-                utTekst = new DataOutputStream(socket.getOutputStream());
 
                 //Hent fra klienten
                 kjønn = innTekst.readUTF();
@@ -38,15 +37,21 @@ public class TaskKjørSøk implements Runnable {
                 minAlder = innTekst.readInt();
                 maxAlder = innTekst.readInt();
                 System.out.println(kjønn + " " +personID + " " + minAlder + " " + maxAlder);
-                DatingDB.søkMatch(personID,kjønn,minAlder,maxAlder);
 
-        }
-        catch (IOException e) {
+
+                brukerListe.addAll(DatingDB.søkMatch(personID,kjønn,minAlder,maxAlder));
+
+            System.out.println("Ble jeg ferdig? : " + brukerListe);
+                utObject = new ObjectOutputStream(socket.getOutputStream());
+
+                utObject.writeObject(brukerListe);
+
+        } catch (IOException e) {
             e.printStackTrace();
         }
         finally {
             try {
-                utTekst.close();
+                utObject.close();
                 innTekst.close();
             }
             catch (IOException e) {

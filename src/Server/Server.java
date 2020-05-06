@@ -7,7 +7,9 @@ import java.net.Socket;
 import java.util.ArrayList;
 
 public class Server {
-    //static private Thread registrerBruker = new Thread(new TaskRegistrerBruker(8000));
+
+
+
     //initialiserer server variablene
     static int port = 8000;
     static ServerSocket serverSocket = startOpp(port);
@@ -23,6 +25,7 @@ public class Server {
         TaskRegistrerBruker regBruker;
         TaskHentValg visMatch;
         TaskBrukerLogin loginBruker;
+
         TaskHentInteresserte visInteresserte;
 
         //Lytter og venter på at noen skal koble seg til å lage ny bruker
@@ -41,7 +44,6 @@ public class Server {
                         regBruker.run();
                         break;
                     case "SOK":
-                        System.out.println("SOOK");
                         kjørSøk = new TaskKjørSøk(socket);
                         kjørSøk.run();
                         break;

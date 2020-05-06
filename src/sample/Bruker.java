@@ -116,6 +116,7 @@ public class Bruker implements Comparable, Serializable {
                 ", interresser=" + interresser +
                 ", bosted='" + bosted + '\'' +
                 ", tlfNr='" + tlfNr + '\'' +
+                ", tlfNr='" + poengSum + '\'' +
                 '}';
     }
 
