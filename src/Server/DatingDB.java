@@ -77,16 +77,15 @@ public class DatingDB {
              }catch(SQLException e){
                 System.out.println(e.getMessage());
             }
-
-                    return sammenligneInteresser(brukerListe, eier);
-
             //Sammenligner interessen til bruker og matcher og sorterer utifra hvor mye de matcher.
+            return sammenligneInteresser(brukerListe, eier);
     }
     // Skriver ut profilinformasjon
     static public Bruker minProfil(int PersonID) {
         Bruker innloggetBruker = new Bruker();
-        String sql2 = "SELECT * FROM Bruker WHERE PersonID = " + PersonID;
+        String sql2 = "SELECT * FROM bruker WHERE PersonID = " + PersonID;
 
+        System.out.println(sql2 + "minprofil");
         try (Connection conn = connect();
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(sql2)) {
@@ -102,16 +101,14 @@ public class DatingDB {
                 int lengde = interesseTekst.length() - 1;
                 String kuttInteresseTekst = interesseTekst.substring(1, lengde);
                 String[] splitTabell = kuttInteresseTekst.split(",");
-
+                System.out.println("jeg har gått en runde i while");
                 innloggetBruker = new Bruker(personID, navn, kjønn, alder, new ArrayList<>(Arrays.asList(splitTabell)), bosted,tlfNr);
-
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
         System.out.println("minProfil");
         return innloggetBruker;
-
     }
 
     static public ArrayList<Bruker> sammenligneInteresser(ArrayList<Bruker> brukerTabell, Bruker eier) {
@@ -131,25 +128,19 @@ public class DatingDB {
                     if (s.equals(j)) {
                         b.setPoengSum(b.getPoengSum() + 1);
                     }
-
                 }
             }
-
             brukerInteresse.clear();
             nyTabell.add(b);
             System.out.println("-");
         }
-
         Collections.sort(nyTabell,Collections.reverseOrder());
 
         for(Bruker b: nyTabell) {
             System.out.println(b.getPersonID() + ": " + b.getPoengSum() + " " + b.getFornavn());
         }
-
         return nyTabell;
-
     }
-       
 
     // Legger inn interessert forholdet mellom brukere
    static public void oppdaterInteressert(int PersonID1, int PersonID2) {
@@ -177,25 +168,27 @@ public class DatingDB {
             Statement stmt = conn.createStatement();
             ResultSet rs = stmt.executeQuery(sql)) {
            while (rs.next()) {
-               int personID = rs.getInt("PersonID");
+               int personID = rs.getInt("bruker_PersonID");
                interessert.add(personID);
            }
        } catch (SQLException e) {
            System.out.println(e.getMessage());
        }
-       if(interessert.size() != 0) {
-           String sql2 = "SELECT * from bruker WHERE PersonID = ";
-           int i = 0;
-           for (int ID : interessert) {
-               if (i >= 1)
-                   sql2 += " OR PersonID = " + ID;
-               else
-                   sql2 += ID;
-               i++;
-           }
-           System.out.println("interessert I meg etter sql laging " + sql2);
-           return brukerFyll(sql2);
-       } else return new ArrayList<Bruker>();
+
+       String sql2 = "SELECT * from bruker WHERE PersonID = ";
+       int i = 0;
+       for (int ID : interessert) {
+           if (i >= 1)
+               sql2 += " OR PersonID = " + ID;
+           else
+               sql2 += ID;
+           i++;
+       }
+       System.out.println(interessert + "INTERESSERTIMEGTABELLEN");
+       System.out.println(sql + "interessertIMeg1");
+       System.out.println(sql2 + "interessertIMeg2");
+       return brukerFyll(sql2);
+
    }
 
    //Skriver ut alle brukere som pålogget-bruker er interessert i
@@ -223,8 +216,9 @@ public class DatingDB {
                sql2 += ID;
            i++;
        }
-       System.out.println("MineValg");
-       System.out.println(sql2 + "-Minevalg");
+
+       System.out.println(sql2+ "mineValg");
+
        return brukerFyll(sql2);
    }
 
@@ -255,7 +249,7 @@ public class DatingDB {
         catch (SQLException e) {
             e.printStackTrace();
         }
-        System.out.println("BrukerFyll");
+        System.out.println("BrukerFyllFERDIG");
         return brukerListe;
     }
 }

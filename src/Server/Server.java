@@ -70,7 +70,6 @@ public class Server {
                         System.out.println("Logg Inn " + personID);
                         loginBruker = new TaskBrukerLogin(socket, personID);
                         loginBruker.run();
-
                         break;
                 }
             }
