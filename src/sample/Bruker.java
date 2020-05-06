@@ -6,7 +6,6 @@ import java.util.ArrayList;
 public class Bruker implements Comparable, Serializable {
     int personID;
     private String fornavn;
-    private String etternavn;
     private String kjonn;
     private int alder;
     private ArrayList interresser;
@@ -14,10 +13,16 @@ public class Bruker implements Comparable, Serializable {
     private String tlfNr;
     private int poengSum;
 
-
-
     public Bruker () {
 
+    }
+
+    public Bruker (int personID, String fornavn, String kjonn, int alder, ArrayList interresser) {
+        this.personID = personID;
+        this.fornavn = fornavn;
+        this.kjonn = kjonn;
+        this.alder = alder;
+        this.interresser = interresser;
     }
 
 
@@ -47,14 +52,6 @@ public class Bruker implements Comparable, Serializable {
 
     public void setFornavn(String fornavn) {
         this.fornavn = fornavn;
-    }
-
-    public String getEtternavn() {
-        return etternavn;
-    }
-
-    public void setEtternavn(String etternavn) {
-        this.etternavn = etternavn;
     }
 
     public String getKjonn() {
@@ -110,13 +107,11 @@ public class Bruker implements Comparable, Serializable {
         return "Bruker{" +
                 "personID=" + personID +
                 ", fornavn='" + fornavn + '\'' +
-                ", etternavn='" + etternavn + '\'' +
                 ", kjonn='" + kjonn + '\'' +
                 ", alder=" + alder +
                 ", interresser=" + interresser +
                 ", bosted='" + bosted + '\'' +
                 ", tlfNr='" + tlfNr + '\'' +
-                ", tlfNr='" + poengSum + '\'' +
                 '}';
     }
 

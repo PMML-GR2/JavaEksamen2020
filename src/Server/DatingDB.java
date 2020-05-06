@@ -49,8 +49,7 @@ public class DatingDB {
         //Finn brukere
         String sql = "SELECT * FROM bruker "
                 + "WHERE Kjonn = " + "'" + kjonn + "'"
-                + " AND Alder BETWEEN " + minAlder + " AND " + maxAlder + " AND PersonID <> " + PersonID
-                + " LIMIT 10;";
+                + " AND Alder BETWEEN " + minAlder + " AND " + maxAlder + " AND PersonID <> " + PersonID;
 
         ArrayList<Bruker> brukerListe = new ArrayList<>();
         Bruker eier = minProfil(PersonID);
@@ -65,13 +64,20 @@ public class DatingDB {
                 String kjønn = rs.getString("Kjonn");
                 int alder = rs.getInt("Alder");
                 String interesseTekst = rs.getString("interesser");
-                String bosted = rs.getString("Bosted");
-                String tlfNr = rs.getString("Tlf");
+
                 int lengde = interesseTekst.length() - 1;
                 String kuttInteresseTekst = interesseTekst.substring(1, lengde);
                 String[] splitTabell = kuttInteresseTekst.split(",");
 
-                brukerListe.add(new Bruker(personID, navn, kjønn, alder, new ArrayList<>(Arrays.asList(splitTabell)), bosted, tlfNr));
+                for(String s: splitTabell){
+                    String ord = s;
+                    ord = ord.toLowerCase();
+
+                    ord = ord.trim();
+                    System.out.print(ord+",");
+                }
+
+                brukerListe.add(new Bruker(personID, navn, kjønn, alder, new ArrayList<>(Arrays.asList(splitTabell))));
             }
              }catch(SQLException e){
                 System.out.println(e.getMessage());
@@ -115,7 +121,6 @@ public class DatingDB {
 
 
     //Sammenligner interesse med innlogget bruker og skriver ut alle brukerene i sortert rekkefølge
-
     static public ArrayList<Bruker> sammenligneInteresser(ArrayList<Bruker> brukerTabell, Bruker eier) {
         int i = 0;
         ArrayList<String> eierInteresse = new ArrayList<>();
@@ -127,9 +132,11 @@ public class DatingDB {
             int poeng = 0;
             brukerInteresse.addAll(b.getInterresser());
             for (String s : eierInteresse) {
-                s.trim();
+                s = s.trim();
+                s = s.toLowerCase();
                 for (String j : brukerInteresse) {
-                    j.trim();
+                    j = j.trim();
+                    j = j.toLowerCase();
                     if (s.equals(j)) {
                         b.setPoengSum(b.getPoengSum() + 1);
                     }
@@ -139,7 +146,17 @@ public class DatingDB {
             nyTabell.add(b);
         }
 
+        //sorterer de etter poeng
         Collections.sort(nyTabell,Collections.reverseOrder());
+
+        //Skriv ut bare top 10;
+        if(nyTabell.size() > 10){
+            int fjern = nyTabell.size() - 10;
+            while(fjern != 0){
+                nyTabell.remove(nyTabell.size()-1);
+                fjern--;
+            }
+        }
 
         for(Bruker b: nyTabell) {
             System.out.println(b.getPersonID() + ": " + b.getPoengSum() + " " + b.getFornavn());
