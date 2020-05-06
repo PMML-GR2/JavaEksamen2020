@@ -4,7 +4,6 @@ import java.util.*;
 import sample.Bruker;
 
 public class DatingDB {
-
     public static Connection connect() {
         String url = "jdbc:sqlite:C://SKOLE/emneOBJ2000/dbeksamen/datingdb.db";
         Connection conn = null;
@@ -110,6 +109,7 @@ public class DatingDB {
         System.out.println("minProfil");
         return innloggetBruker;
     }
+        // Sammenligner interesser
     static public ArrayList<Bruker> sammenligneInteresser(ArrayList<Bruker> brukerTabell, Bruker eier) {
         int i = 0;
         ArrayList<String> eierInteresse = new ArrayList<>();
@@ -215,7 +215,6 @@ public class DatingDB {
        }
        else return new ArrayList<>();
    }
-
     //Hjelpemetode for å skrive ut alle brukere som har fulgt en kriterie laget utenfor
     static ArrayList<Bruker> brukerFyll(String sql) {
         Bruker bruker;

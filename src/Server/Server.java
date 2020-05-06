@@ -1,7 +1,5 @@
 package Server;
-
 import sample.Bruker;
-
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -18,7 +16,6 @@ public class Server {
     static Socket socket;
     static ArrayList<Bruker> brukerListe = new ArrayList<>();
 
-
     public static void main(String[] args) {
         DataInputStream innTekst = null;
 
@@ -28,12 +25,6 @@ public class Server {
         TaskBrukerLogin loginBruker;
         TaskHentInteresserte visInteresserte;
 
-        //DatingDB.visMineUtsendtInfo(11);
-        //ArrayList<String> test = new ArrayList<>();
-        //test.add(DatingDB.visNavnOgTlf(10,13).toString());
-        //System.out.println(DatingDB.visNavnOgTlf(10, 13).toString());
-
-
         //Lytter og venter på at noen skal koble seg til å lage ny bruker
         try {
             while (true) {
@@ -42,7 +33,6 @@ public class Server {
                 innTekst = new DataInputStream(socket.getInputStream());
                 handling = innTekst.readUTF();
                 System.out.println(handling);
-
 
                 switch (handling) {
                     case "REGISTRER":
@@ -62,7 +52,6 @@ public class Server {
                         break;
                     case "INTERESSERT":
                         System.out.println("Mine valg");
-                        //System.out.println(innTekst.readUTF() + " " + innTekst.readUTF());
                         visMatch = new TaskHentValg(socket);
                         visMatch.run();
                         break;
@@ -77,7 +66,6 @@ public class Server {
         }
         catch (IOException ex){ex.printStackTrace();}
     }
-
     //Opprett en server
     static private ServerSocket startOpp(int port){
         ServerSocket serverSocket = null;

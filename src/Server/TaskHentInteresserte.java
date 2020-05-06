@@ -2,7 +2,6 @@ package Server;
 
 import sample.Bruker;
 import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
@@ -32,20 +31,18 @@ public class TaskHentInteresserte implements Runnable {
             //Skriver ut alle brukere som er lagret i db som interresant.
             brukerListe = DatingDB.interessertIMeg(personID);
             outObject.writeObject(brukerListe);
-
-        } catch (IOException e) {
+        }
+        catch (IOException e) {
             e.printStackTrace();
-        } finally {
+        }
+        finally {
             try {
                 innTekst.close();
                 outObject.close();
-            } catch (IOException e) {
+            }
+            catch (IOException e) {
                 e.printStackTrace();
             }
         }
-
-
     }
-
-
 }
