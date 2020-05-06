@@ -1,7 +1,5 @@
 package Server;
-
 import sample.Bruker;
-
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -9,6 +7,8 @@ import java.net.Socket;
 import java.util.ArrayList;
 
 public class Server {
+
+
 
     //initialiserer server variablene
     static int port = 8000;
@@ -18,7 +18,6 @@ public class Server {
     static Socket socket;
     static ArrayList<Bruker> brukerListe = new ArrayList<>();
 
-
     public static void main(String[] args) {
         DataInputStream innTekst = null;
 
@@ -27,16 +26,16 @@ public class Server {
         TaskHentValg visMatch;
         TaskBrukerLogin loginBruker;
 
+        TaskHentInteresserte visInteresserte;
+
         //Lytter og venter på at noen skal koble seg til å lage ny bruker
         try {
             while (true) {
                 socket = serverSocket.accept();
-
                 System.out.println("kjører");
                 innTekst = new DataInputStream(socket.getInputStream());
                 handling = innTekst.readUTF();
                 System.out.println(handling);
-
 
                 switch (handling) {
                     case "REGISTRER":
@@ -48,12 +47,13 @@ public class Server {
                         kjørSøk = new TaskKjørSøk(socket);
                         kjørSøk.run();
                         break;
-                    case "KONTAKT":
-                        System.out.println("Kontakt");
+                    case "INTERESSERTIMEG":
+                        System.out.println("Valgt meg");
+                        visInteresserte = new TaskHentInteresserte(socket);
+                        visInteresserte.run();
                         break;
                     case "INTERESSERT":
-                        System.out.println("Interessert");
-                        //System.out.println(innTekst.readUTF() + " " + innTekst.readUTF());
+                        System.out.println("Mine valg");
                         visMatch = new TaskHentValg(socket);
                         visMatch.run();
                         break;
@@ -68,7 +68,6 @@ public class Server {
         }
         catch (IOException ex){ex.printStackTrace();}
     }
-
     //Opprett en server
     static private ServerSocket startOpp(int port){
         ServerSocket serverSocket = null;

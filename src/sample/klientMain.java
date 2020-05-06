@@ -26,11 +26,11 @@ public class klientMain{
     public static void main(String[] args) {
         try{
             hentIDFraTekstFil();
-            //oppStart("LOGIN", tildeltPersonID);
-            //interessertI("INTERESSERT",tildeltPersonID,11);
+            interessertI("INTERESSERT",tildeltPersonID,11);
+            interessertIMeg("INTERESSERTIMEG", tildeltPersonID, 14);
             sokKlient("SOK","M", tildeltPersonID,18, 70);
-            //registrerBruker("REGISTRER","Ida", "K", 23,"musikk,Hest,Steinkasting","Bø","323352352");
-
+            registrerBruker("REGISTRER","Ida", "K", 23,"musikk,Hest,Steinkasting","Bø","323352352");
+            oppStart("LOGIN", tildeltPersonID);
         }catch(IOException ex){
             //Kanskje skrive en besked i GUI om at man har skrevet inn ulovlig/feil informasjon???
             ex.printStackTrace();
@@ -125,13 +125,35 @@ public class klientMain{
         skrivUt.writeInt(personID);
         skrivUt.writeInt(likerID);
 
-       // lesObjekt = new ObjectInputStream(socket.getInputStream());
+        lesObjekt = new ObjectInputStream(socket.getInputStream());
 
-        //interessertI.addAll((ArrayList<Bruker>)lesObjekt.readObject());
+        interessertI.addAll((ArrayList<Bruker>)lesObjekt.readObject());
 
-        //System.out.println(interessertI + "Hallaaaa");
+        System.out.println(interessertI + "Hallaaaa");
 
-        //lesObjekt.close();
+        lesObjekt.close();
+        skrivUt.close();
+        socket.close();
+
+    }
+    public static void interessertIMeg(String handling,int personID, int likerID) throws IOException,
+            ClassNotFoundException{
+
+        socket = new Socket(host,port);
+        skrivUt = new DataOutputStream(socket.getOutputStream());
+
+
+        skrivUt.writeUTF(handling);
+        skrivUt.writeInt(personID);
+        skrivUt.writeInt(likerID);
+
+        lesObjekt = new ObjectInputStream(socket.getInputStream());
+
+        likerMeg.addAll((ArrayList<Bruker>)lesObjekt.readObject());
+
+        System.out.println(likerMeg + "Hallaaaa");
+
+        lesObjekt.close();
         skrivUt.close();
         socket.close();
     }
@@ -143,7 +165,7 @@ public class klientMain{
 
         try{
             //skriv inn en filepath som passer deg
-            File fil = new File("C:\\Users\\loren\\OneDrive\\Desktop\\Skolestuff\\OBJProgsemester2\\personID.txt");
+            File fil = new File("C:\\SKOLE\\emneOBJ2000\\eksamenstesting\\personID.txt");
             if(!fil.exists()){
                 PrintWriter utSkriv = new PrintWriter(fil);
                 //tildeltPersonID = personID; ??
@@ -161,7 +183,7 @@ public class klientMain{
     static public void hentIDFraTekstFil() throws IOException, ClassNotFoundException{
 
         //skriv inn en filepath som passer deg
-        File fil = new File("C:\\Users\\loren\\OneDrive\\Desktop\\Skolestuff\\OBJProgsemester2\\personID.txt");
+        File fil = new File("C:\\SKOLE\\emneOBJ2000\\eksamenstesting\\personID.txt");
         Scanner skanner = new Scanner(fil);
         socket = new Socket(host,port);
         skrivUt = new DataOutputStream(socket.getOutputStream());
