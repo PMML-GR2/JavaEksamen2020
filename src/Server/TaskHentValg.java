@@ -2,16 +2,10 @@ package Server;
 
 import sample.Bruker;
 import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
-
-import java.util.Arrays;
-import java.util.Collections;
-
-
 
 public class TaskHentValg implements Runnable {
     int SpørrID;
@@ -29,7 +23,6 @@ public class TaskHentValg implements Runnable {
     @Override
     public void run() {
         try {
-
             //Lag dataOutput til klient
             innTekst = new DataInputStream(socket.getInputStream());
             outObject = new ObjectOutputStream(socket.getOutputStream());
@@ -41,22 +34,19 @@ public class TaskHentValg implements Runnable {
             DatingDB.oppdaterInteressert(SpørrID, VisID);
             //Skriver ut alle brukere som er lagret i db som interresant.
             brukerListe = DatingDB.mineValg(SpørrID);
-
             outObject.writeObject(brukerListe);
-
-        } catch (IOException e) {
+        }
+        catch (IOException e) {
             e.printStackTrace();
-        } finally {
+        }
+        finally {
             try {
                 innTekst.close();
                 outObject.close();
-            } catch (IOException e) {
+            }
+            catch (IOException e) {
                 e.printStackTrace();
             }
         }
-
-
     }
-
-
 }

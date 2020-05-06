@@ -5,8 +5,6 @@ import sample.Bruker;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.lang.reflect.Array;
-import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 
@@ -15,12 +13,11 @@ public class TaskKjørSøk implements Runnable {
     int minAlder;
     int maxAlder;
     int personID;
+    ArrayList<Bruker> brukerListe;
 
-   Socket socket;
+    Socket socket;
     DataInputStream innTekst = null;
     DataOutputStream utTekst = null;
-
-    ArrayList<Bruker> brukerListe;
 
     public TaskKjørSøk(Socket socket){
         this.socket = socket;
@@ -28,7 +25,6 @@ public class TaskKjørSøk implements Runnable {
 
     @Override
     public void run() {
-
         try {
                 System.out.println("Bruker gjør ett søk");
 
@@ -44,20 +40,18 @@ public class TaskKjørSøk implements Runnable {
                 System.out.println(kjønn + " " +personID + " " + minAlder + " " + maxAlder);
                 DatingDB.søkMatch(personID,kjønn,minAlder,maxAlder);
 
-
-        } catch (IOException e) {
+        }
+        catch (IOException e) {
             e.printStackTrace();
-        } finally {
+        }
+        finally {
             try {
                 utTekst.close();
                 innTekst.close();
-            } catch (IOException e) {
+            }
+            catch (IOException e) {
                 e.printStackTrace();
             }
         }
-
-
     }
-
-
 }

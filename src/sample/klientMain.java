@@ -25,11 +25,11 @@ public class klientMain{
     public static void main(String[] args) {
         try{
             hentIDFraTekstFil();
-            //interessertI("INTERESSERT",tildeltPersonID,11);
+            interessertI("INTERESSERT",tildeltPersonID,11);
             interessertIMeg("INTERESSERTIMEG", tildeltPersonID, 14);
-            //sokKlient("SOK","M", tildeltPersonID,18, 70);
-            //registrerBruker("REGISTRER","Ida", "K", 23,"musikk,Hest,Steinkasting","Bø","323352352");
-            //oppStart("LOGIN", tildeltPersonID);
+            sokKlient("SOK","M", tildeltPersonID,18, 70);
+            registrerBruker("REGISTRER","Ida", "K", 23,"musikk,Hest,Steinkasting","Bø","323352352");
+            oppStart("LOGIN", tildeltPersonID);
         }catch(IOException ex){
             //Kanskje skrive en besked i GUI om at man har skrevet inn ulovlig/feil informasjon???
             ex.printStackTrace();
