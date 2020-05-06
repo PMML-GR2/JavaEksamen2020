@@ -25,6 +25,7 @@ public class Server {
         TaskKjørSøk kjørSøk;
         TaskRegistrerBruker regBruker;
         TaskHentValg visMatch;
+        TaskBrukerLogin loginBruker;
 
         //DatingDB.visMineUtsendtInfo(11);
         //ArrayList<String> test = new ArrayList<>();
@@ -61,13 +62,15 @@ public class Server {
                         visMatch.run();
                         break;
                     case "LOGIN":
-                        System.out.println("Logg Inn Id: " + innTekst.readInt());
+                        System.out.println("Logg Inn Id: ");
+                        loginBruker = new TaskBrukerLogin(socket);
+                        loginBruker.run();
+
                         break;
                 }
             }
         }
         catch (IOException ex){ex.printStackTrace();}
-
     }
 
     //Opprett en server

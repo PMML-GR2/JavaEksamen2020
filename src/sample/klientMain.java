@@ -15,6 +15,8 @@ public class klientMain{
     static Socket socket;
     static int tildeltPersonID;
     static ArrayList<Bruker> interessertI = new ArrayList<>();
+    static ArrayList<Bruker> likerMeg = new ArrayList<>();
+    static Bruker bruker;
 
     static DataOutputStream skrivUt;
     static DataInputStream hentTekst;
@@ -25,9 +27,10 @@ public class klientMain{
     public static void main(String[] args) {
         try{
             hentIDFraTekstFil();
-            interessertI("INTERESSERT",tildeltPersonID,11);
+            //interessertI("INTERESSERT",tildeltPersonID,11);
             //sokKlient("SOK","M", tildeltPersonID,18, 70);
             //registrerBruker("REGISTRER","Ida", "K", 23,"musikk,Hest,Steinkasting","Bø","323352352");
+            oppStart("LOGIN", tildeltPersonID);
         }catch(IOException ex){
             //Kanskje skrive en besked i GUI om at man har skrevet inn ulovlig/feil informasjon???
             ex.printStackTrace();
@@ -35,7 +38,29 @@ public class klientMain{
             ex2.printStackTrace();
         }
     }
+    static public void oppStart(String handling, int tildeltPersonID) throws IOException, ClassNotFoundException {
+        if (tildeltPersonID != 0) {
+            socket = new Socket(host,port);
+            lesObjekt = new ObjectInputStream(socket.getInputStream());
+            skrivUt = new DataOutputStream(socket.getOutputStream());
 
+            skrivUt.writeUTF(handling);
+            skrivUt.writeInt(tildeltPersonID);
+            lesObjekt.readObject();
+
+            interessertI.addAll((ArrayList<Bruker>)lesObjekt.readObject());
+            likerMeg.addAll((ArrayList<Bruker>)lesObjekt.readObject());
+            bruker = (Bruker)lesObjekt.readObject();
+
+            System.out.println(interessertI);
+            System.out.println(likerMeg);
+            System.out.println(bruker);
+
+            skrivUt.close();
+            lesObjekt.close();
+            socket.close();
+        }
+    }
     static public void registrerBruker(String handling,String navn, String kjonn, int alder, String interesser,String by, String tlf) throws IOException,
             ClassNotFoundException{
 
