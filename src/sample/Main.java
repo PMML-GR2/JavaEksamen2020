@@ -1,4 +1,4 @@
-package GUI;
+package sample;
 
 import javafx.application.Application;
 import javafx.geometry.Insets;

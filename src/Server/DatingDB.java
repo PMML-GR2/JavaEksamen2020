@@ -1,7 +1,7 @@
 package Server;
 import java.sql.*;
 import java.util.*;
-import GUI.Bruker;
+import sample.Bruker;
 
 public class DatingDB {
 

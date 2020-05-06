@@ -1,4 +1,4 @@
-package GUI;
+package sample;
 
 import java.io.Serializable;
 import java.util.ArrayList;

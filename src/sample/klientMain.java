@@ -1,11 +1,10 @@
-package GUI;
+package sample;
 import java.io.*;
 import java.net.*;
 import java.io.DataOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.*;
-import java.io.Serializable;
 import java.util.ArrayList;
 
 

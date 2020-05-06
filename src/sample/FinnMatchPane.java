@@ -1,4 +1,4 @@
-package GUI;
+package sample;
 
 import javafx.scene.layout.BorderPane;
 
