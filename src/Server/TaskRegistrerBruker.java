@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.net.Socket;
 import java.util.ArrayList;
 
+
+//Denne klassen tar seg av read og write når en bruker skal registrere seg
 public class TaskRegistrerBruker implements Runnable{
     //InnVariabler til registrering
     String navn;

@@ -26,12 +26,12 @@ public class klientMain{
     public static void main(String[] args) {
         try{
             hentIDFraTekstFil();
-
+            oppStart("LOGIN", tildeltPersonID);
             //interessertI("INTERESSERT",tildeltPersonID,11);
-            //interessertIMeg("INTERESSERTIMEG", tildeltPersonID, 14);
-            sokKlient("SOK","K", tildeltPersonID,18, 70);
-            //registrerBruker("REGISTRER","Idsa", "M", 25,"musikk,Hest,Steinkasting","Porsgrunn","323352352");
-            //oppStart("LOGIN", tildeltPersonID);
+            //interessertIMeg("INTERESSERTIMEG", tildeltPersonID);
+            //sokKlient("SOK","K", tildeltPersonID,18, 70);
+            //registrerBruker("REGISTRER","Mango", "M", 36,"Hoppetau,Turn,Mat","Porsgrunn","323352352");
+
         }catch(IOException ex){
             //Kanskje skrive en besked i GUI om at man har skrevet inn ulovlig/feil informasjon???
             ex.printStackTrace();
@@ -196,9 +196,6 @@ public class klientMain{
 
         skrivUt.close();
         skanner.close();
-
-
-
     }
 
 }

@@ -9,6 +9,7 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
 
+//Denne klassen tar seg av å søke etter matcher til den innloggede brukeren
 public class TaskKjørSøk implements Runnable {
     String kjønn;
     int minAlder;
