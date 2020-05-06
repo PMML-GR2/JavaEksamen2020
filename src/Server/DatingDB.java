@@ -47,17 +47,17 @@ public class DatingDB {
     }
 
     static public void søkMatch(int PersonID, String kjonn, int minAlder, int maxAlder) {
+        //Finn brukere
         String sql = "SELECT * FROM bruker "
                 + "WHERE Kjonn = " + "'" + kjonn + "'"
-                + " AND Alder BETWEEN " + minAlder + " AND " + maxAlder
+                + " AND Alder BETWEEN " + minAlder + " AND " + maxAlder + " AND PersonID <> " + PersonID
                 + " LIMIT 10;";
 
-        HashMap<Integer, ArrayList<String>> interesseMap = new HashMap<>();
-        ArrayList<Bruker> brukerListe = new ArrayList<>();
 
+        ArrayList<Bruker> brukerListe = new ArrayList<>();
         Bruker bruker;
-        String [] interess = {"Bil","Hest","musikk"," Steinkasting"};
-        Bruker eier = new Bruker(8, "Felix", "M", 27, new ArrayList<>(Arrays.asList(interess)), "Film", "2352352");
+
+        Bruker eier;
 
         try (Connection conn = connect();
              Statement stmt = conn.createStatement();
@@ -77,13 +77,38 @@ public class DatingDB {
 
                 bruker = new Bruker(personID, navn, kjønn, alder, new ArrayList<>(Arrays.asList(splitTabell)), bosted, tlfNr);
                 brukerListe.add(bruker);
+
+            }
+             }catch(SQLException e){
+                System.out.println(e.getMessage());
+            }
+
+       String sql2 = "SELECT * FROM Bruker WHERE PersonID = " + PersonID;
+
+            try (Connection conn = connect();
+                 Statement stmt = conn.createStatement();
+                 ResultSet rs = stmt.executeQuery(sql2)) {
+                while (rs.next()) {
+                    //Henter all brukerinfoen og legger dem inn i brukertabellen.
+                    int personID = rs.getInt("PersonID");
+                    String navn = rs.getString("Navn");
+                    String kjønn = rs.getString("Kjonn");
+                    int alder = rs.getInt("Alder");
+                    String interesseTekst = rs.getString("interesser");
+                    String bosted = rs.getString("Bosted");
+                    String tlfNr = rs.getString("Tlf");
+                    int lengde = interesseTekst.length() - 1;
+                    String kuttInteresseTekst = interesseTekst.substring(1, lengde);
+                    String[] splitTabell = kuttInteresseTekst.split(",");
+
+                    eier = new Bruker(personID, navn, kjønn, alder, new ArrayList<>(Arrays.asList(splitTabell)), bosted,tlfNr);
+                    sammenligneInteresser(brukerListe, eier);
+                }
+            } catch (SQLException e) {
+                System.out.println(e.getMessage());
             }
 
             //Sammenligner interessen til bruker og matcher og sorterer utifra hvor mye de matcher.
-            sammenligneInteresser(brukerListe, eier);
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
     }
     // Skriver ut profilinformasjon
     static public Bruker minProfil(int PersonID) {
@@ -131,20 +156,24 @@ public class DatingDB {
                     j.trim();
                     if (s.equals(j)) {
                         b.setPoengSum(b.getPoengSum() + 1);
-                        nyTabell.add(b);
-                       System.out.print("(TRUE!)");
                     }
-                    System.out.print(b.getPersonID() + ": " + s + "-" + j + ",  ");
+
                 }
             }
+
+            brukerInteresse.clear();
+            nyTabell.add(b);
             System.out.println("-");
         }
 
-        Collections.sort(nyTabell);
+        Collections.sort(nyTabell,Collections.reverseOrder());
+
         for(Bruker b: nyTabell) {
-            System.out.println(b.getPoengSum() + " " + b.getFornavn());
+            System.out.println(b.getPersonID() + ": " + b.getPoengSum() + " " + b.getFornavn());
         }
+
     }
+       
 
     // Navn og telefonNr til person som bruker liker blir vist
    static public void oppdaterInteressert(int PersonID1, int PersonID2) {

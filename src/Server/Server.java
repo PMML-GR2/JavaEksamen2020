@@ -37,6 +37,7 @@ public class Server {
             while (true) {
                 Socket socket = serverSocket.accept();
 
+                System.out.println("kjører");
                 innTekst = new DataInputStream(socket.getInputStream());
                 handling = innTekst.readUTF();
 

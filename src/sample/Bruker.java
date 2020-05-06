@@ -15,7 +15,6 @@ public class Bruker implements Comparable, Serializable {
     private int poengSum;
 
 
-   
     public Bruker () {
 
     }

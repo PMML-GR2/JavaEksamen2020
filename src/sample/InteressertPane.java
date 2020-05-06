@@ -20,6 +20,10 @@ public class InteressertPane extends BorderPane {
 /*    private ArrayList<String> matcher;*/
 
 
+    //alle personer som har trykket på deg, med navn, alder, telefon, sted, kjønn, interesse
+
+    //https://cdn4.iconfinder.com/data/icons/momenticons-basic/32x32/favorites.png
+
     public InteressertPane() {
         testBox1 = new VBox();
         vboxSkjema = new VBox();
