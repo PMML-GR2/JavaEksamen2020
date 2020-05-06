@@ -11,7 +11,6 @@ import java.util.ArrayList;
 
 public class TaskBrukerLogin implements Runnable {
     Socket socket;
-    DataOutputStream utTekst = null;
     ObjectOutputStream outObject = null;
 
     int personID;
@@ -49,7 +48,6 @@ public class TaskBrukerLogin implements Runnable {
             e.printStackTrace();
         } finally {
             try {
-                utTekst.close();
                 outObject.close();
 
             } catch (IOException e) {

@@ -11,7 +11,8 @@ public class klientMain{
     static String host = "localhost";
     static int port = 8000;
     static Socket socket;
-    static int tildeltPersonID;
+    static int tildeltPersonID = 0;
+    static ArrayList<Bruker> søkTreff = new ArrayList<>();
     static ArrayList<Bruker> interessertI = new ArrayList<>();
     static ArrayList<Bruker> likerMeg = new ArrayList<>();
     static Bruker bruker;
@@ -25,10 +26,11 @@ public class klientMain{
     public static void main(String[] args) {
         try{
             hentIDFraTekstFil();
+            //oppStart("LOGIN", tildeltPersonID);
             //interessertI("INTERESSERT",tildeltPersonID,11);
-            //sokKlient("SOK","M", tildeltPersonID,18, 70);
+            sokKlient("SOK","M", tildeltPersonID,18, 70);
             //registrerBruker("REGISTRER","Ida", "K", 23,"musikk,Hest,Steinkasting","Bø","323352352");
-            oppStart("LOGIN", tildeltPersonID);
+
         }catch(IOException ex){
             //Kanskje skrive en besked i GUI om at man har skrevet inn ulovlig/feil informasjon???
             ex.printStackTrace();
@@ -95,7 +97,6 @@ public class klientMain{
 
         socket = new Socket(host,port);
         skrivUt = new DataOutputStream(socket.getOutputStream());
-//skrivHandle = new ObjectOutputStream(socket.getOutputStream());
 
         skrivUt.writeUTF(handling);
         skrivUt.writeUTF(kjonn);
@@ -103,9 +104,13 @@ public class klientMain{
         skrivUt.writeInt(miniAlder);
         skrivUt.writeInt(maxAlder);
 
+        lesObjekt = new ObjectInputStream(socket.getInputStream());
 
-        System.out.println("SøkData sendt");
-//in.close();
+        søkTreff.addAll((ArrayList<Bruker>)lesObjekt.readObject());
+
+        System.out.println("SøkResultat: " + søkTreff);
+
+        lesObjekt.close();
         skrivUt.close();
         socket.close();
     }
@@ -129,7 +134,6 @@ public class klientMain{
         //lesObjekt.close();
         skrivUt.close();
         socket.close();
-
     }
 
 

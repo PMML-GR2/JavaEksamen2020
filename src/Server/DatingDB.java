@@ -77,8 +77,11 @@ public class DatingDB {
              }catch(SQLException e){
                 System.out.println(e.getMessage());
             }
-            //Sammenligner interessen til bruker og matcher og sorterer utifra hvor mye de matcher.
+        //Sammenligner interessen til bruker og matcher og sorterer utifra hvor mye de matcher.
+        if(brukerListe.size() != 0) {
             return sammenligneInteresser(brukerListe, eier);
+        }else return new ArrayList<Bruker>();
+
     }
     // Skriver ut profilinformasjon
     static public Bruker minProfil(int PersonID) {
@@ -111,6 +114,7 @@ public class DatingDB {
         return innloggetBruker;
     }
 
+    //Sammenligner interesse med innlogget bruker og skriver ut alle brukerene i sortert rekkefølge
     static public ArrayList<Bruker> sammenligneInteresser(ArrayList<Bruker> brukerTabell, Bruker eier) {
         int i = 0;
         ArrayList<String> eierInteresse = new ArrayList<>();
@@ -132,8 +136,8 @@ public class DatingDB {
             }
             brukerInteresse.clear();
             nyTabell.add(b);
-            System.out.println("-");
         }
+
         Collections.sort(nyTabell,Collections.reverseOrder());
 
         for(Bruker b: nyTabell) {

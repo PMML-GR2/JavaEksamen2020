@@ -5,6 +5,7 @@ import sample.Bruker;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.lang.reflect.Array;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -16,15 +17,11 @@ public class TaskKjørSøk implements Runnable {
     int maxAlder;
     int personID;
 
-   Socket socket;
+    Socket socket;
     DataInputStream innTekst = null;
-    DataOutputStream utTekst = null;
-<<<<<<< HEAD
-    ArrayList<Bruker> bruker;
+    ObjectOutputStream utObject = null;
 
-=======
-    ArrayList<Bruker> brukerListe;
->>>>>>> aee309804a7fa75c80fc16a46a3b1ad560ba4bf0
+    ArrayList<Bruker> brukerListe = new ArrayList<>();
 
     public TaskKjørSøk(Socket socket){
         this.socket = socket;
@@ -38,7 +35,6 @@ public class TaskKjørSøk implements Runnable {
 
                 //Lag dataOutput til klient
                 innTekst = new DataInputStream(socket.getInputStream());
-                utTekst = new DataOutputStream(socket.getOutputStream());
 
                 //Hent fra klienten
                 kjønn = innTekst.readUTF();
@@ -46,14 +42,19 @@ public class TaskKjørSøk implements Runnable {
                 minAlder = innTekst.readInt();
                 maxAlder = innTekst.readInt();
                 System.out.println(kjønn + " " +personID + " " + minAlder + " " + maxAlder);
-                DatingDB.søkMatch(personID,kjønn,minAlder,maxAlder);
 
+                brukerListe.addAll(DatingDB.søkMatch(personID,kjønn,minAlder,maxAlder));
+
+            System.out.println("Ble jeg ferdig? : " + brukerListe);
+                utObject = new ObjectOutputStream(socket.getOutputStream());
+
+                utObject.writeObject(brukerListe);
 
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
             try {
-                utTekst.close();
+                utObject.close();
                 innTekst.close();
             } catch (IOException e) {
                 e.printStackTrace();
