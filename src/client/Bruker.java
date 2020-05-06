@@ -1,23 +1,23 @@
-package sample;
+package client;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 
 public class Bruker implements Comparable, Serializable {
-    int personID;
-    private String fornavn;
-    private String etternavn;
+    private int personID;
+    private String fulltNavn;
     private String kjonn;
     private int alder;
-    private ArrayList interresser;
+    private List<String> interresser;
     private String bosted;
     private String tlfNr;
     private int poengSum;
 
 
-    public Bruker(int personID, String fornavn, String kjonn, int alder, ArrayList interresser, String bosted, String tlfNr) {
+    public Bruker(int personID, String fulltNavn, String kjonn, int alder, ArrayList interresser, String bosted, String tlfNr) {
         this.personID = personID;
-        this.fornavn = fornavn;
+        this.fulltNavn = fulltNavn;
         this.kjonn = kjonn;
         this.alder = alder;
         this.interresser = interresser;
@@ -25,6 +25,8 @@ public class Bruker implements Comparable, Serializable {
         this.tlfNr = tlfNr;
     }
 
+    public Bruker() {
+    }
 
     public int getPersonID() {
         return personID;
@@ -35,21 +37,14 @@ public class Bruker implements Comparable, Serializable {
 
     }
 
-    public String getFornavn() {
-        return fornavn;
+    public String getFulltNavn() {
+        return fulltNavn;
     }
 
-    public void setFornavn(String fornavn) {
-        this.fornavn = fornavn;
+    public void setFulltNavn(String fulltNavn) {
+        this.fulltNavn = fulltNavn;
     }
 
-    public String getEtternavn() {
-        return etternavn;
-    }
-
-    public void setEtternavn(String etternavn) {
-        this.etternavn = etternavn;
-    }
 
     public String getKjonn() {
         return kjonn;
@@ -67,11 +62,11 @@ public class Bruker implements Comparable, Serializable {
         this.alder = alder;
     }
 
-    public ArrayList getInterresser() {
+    public List<String> getInterresser() {
         return interresser;
     }
 
-    public void setInterresser(ArrayList interresser) {
+    public void setInterresser(List<String> interresser) {
         this.interresser = interresser;
     }
 
@@ -103,8 +98,7 @@ public class Bruker implements Comparable, Serializable {
     public String toString() {
         return "Bruker{" +
                 "personID=" + personID +
-                ", fornavn='" + fornavn + '\'' +
-                ", etternavn='" + etternavn + '\'' +
+                ", fullt navn='" + fulltNavn + '\'' +
                 ", kjonn='" + kjonn + '\'' +
                 ", alder=" + alder +
                 ", interresser=" + interresser +

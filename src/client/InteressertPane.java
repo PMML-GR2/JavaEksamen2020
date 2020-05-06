@@ -1,4 +1,4 @@
-package sample;
+package client;
 
 import javafx.geometry.Insets;
 import javafx.scene.control.*;
@@ -7,8 +7,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-
-import java.util.ArrayList;
 
 public class InteressertPane extends BorderPane {
     private Label tekst;
@@ -19,25 +17,14 @@ public class InteressertPane extends BorderPane {
     private VBox matchprofil;
     private HBox matchprofilalt;
     private Button profilHjerteknapp;
-/*    private ArrayList<String> matcher;*/
+    private BorderPane mainPane;
 
-
-    //alle personer som har trykket på deg, med navn, alder, telefon, sted, kjønn, interesse
-
-    //https://cdn4.iconfinder.com/data/icons/momenticons-basic/32x32/favorites.png
-
-    public InteressertPane() {
+    public InteressertPane(Bruker bruker, BorderPane mainPane) {
+        this.mainPane = mainPane;
         testBox1 = new VBox();
         vboxSkjema = new VBox();
         matchprofil = new VBox();
         matchprofilalt = new HBox();
-
-     /*   matcher = new ArrayList();*/
-
-
-        overskrift = new Label("Matcher: ");
-        setPadding(new Insets(20, 5, 20, 100));
-        setTop(overskrift);
 
 
         imageView2 = new ImageView(new Image("https://cdn4.iconfinder.com/data/icons/momenticons-basic/32x32/favorites2-add.png"));
@@ -46,12 +33,16 @@ public class InteressertPane extends BorderPane {
         profilHjerteknapp = new Button("  ",imageView2);
         profilHjerteknapp.setPadding(new Insets(20,0,0,0));
         profilHjerteknapp.setStyle("-fx-background-color:transparent;");
+        profilHjerteknapp.setOnAction(event -> {
+            DataService.getInstance().getLagtTilBruker().add(bruker);
+            mainPane.setCenter(new ProfilePane(bruker));
+        });
 
-      /*  matcher.add("");*/
+
         tekst = new Label(
-                "Kvinne, 25" + "\n" +
-                        "Fra: Porsgrunn " + "\n" +
-                        "Interesser: Dans, Musikk");
+                bruker.getKjonn() + " " + bruker.getAlder() +  "\n" +
+                        "Fra: " + bruker.getBosted() + "\n" +
+                        "Interesser: " + String.join(", ", bruker.getInterresser()));
 
         tekst.setPadding(new Insets(10));
         tekst.setPrefWidth(300);

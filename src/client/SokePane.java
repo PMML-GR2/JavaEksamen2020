@@ -1,4 +1,4 @@
-package sample;
+package client;
 
 
 import javafx.geometry.Insets;
@@ -8,8 +8,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-
-import java.util.ArrayList;
 
 
 public class SokePane extends BorderPane {
@@ -31,9 +29,18 @@ public class SokePane extends BorderPane {
     private VBox testBox1;
     private Button sokKnapp;
     private ImageView imageView1;
+    private DataService dataService;
+    private Sok sok;
+    private InteressertListPane interessertListPane;
+    private BorderPane mainPane;
 
 
-    public SokePane() {
+    public SokePane(InteressertListPane interessertListPane, BorderPane mainPane) {
+        this.mainPane = mainPane;
+        this.interessertListPane = interessertListPane;
+        dataService = DataService.getInstance();
+
+        setPadding(new Insets(0,0,0,70));
         testBox1 = new VBox();
         vboxSkjema = new VBox();
         sokfelt1 = new HBox();
@@ -41,6 +48,8 @@ public class SokePane extends BorderPane {
         sokfelt3 = new HBox();
         sokfelt4 = new HBox();
         sokfelt5 = new HBox();
+
+
 
         sokKjonntxt = new Label("Interessert i: ");
         sokKjonntxt.setPadding(new Insets(25,0,8,0));
@@ -80,6 +89,24 @@ public class SokePane extends BorderPane {
         sokKnapp.setStyle("-fx-background-color:#ce93a2;");
         sokfelt5.setPadding(new Insets(40,0,8,0));
 
+        sokKnapp.setOnAction(event -> {
+            sok = new Sok();
+            sok.setBeggeKjonn(sokBeggeKjonn.isSelected());
+            sok.setKvinne(sokKvinne.isSelected());
+            sok.setMann(sokMann.isSelected());
+            sok.setFraAlder(Integer.parseInt(sokAlderFelt1.getText()));
+            sok.setTilAlder(Integer.parseInt(sokAlderFelt2.getText()));
+
+            interessertListPane.getChildren().clear();
+            dataService.getMatchBrukere().stream()
+                    .filter(bruker -> sok.isBeggeKjonn() || bruker.getKjonn().equals(sok.isMann() ? "Mann" : "Kvinne"))
+                    .filter(bruker -> bruker.getAlder() >= sok.getFraAlder() && bruker.getAlder() <= sok.getTilAlder())
+                    .forEach(bruker -> {
+                interessertListPane.addInteressert(new InteressertPane(bruker, this.mainPane));
+            });
+        });
+
+
 
 
         sokfelt1.getChildren().addAll(sokKjonntxt);
@@ -88,8 +115,11 @@ public class SokePane extends BorderPane {
         sokfelt4.getChildren().addAll(sokAlderFelt1,soktilfra,sokAlderFelt2);
         sokfelt5.getChildren().addAll(sokKnapp);
         testBox1.getChildren().addAll(sokfelt1,sokfelt2,sokfelt3,sokfelt4,sokfelt5);
-        setRight(testBox1);
+        setLeft(testBox1);
 
     }
+
+
+
 
 }

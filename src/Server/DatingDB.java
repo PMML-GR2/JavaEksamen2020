@@ -2,7 +2,7 @@ package Server;
 import java.sql.*;
 import java.util.*;
 
-import sample.Bruker;
+import client.Bruker;
 
 public class DatingDB {
 
@@ -143,7 +143,7 @@ public class DatingDB {
         Collections.sort(nyTabell,Collections.reverseOrder());
 
         for(Bruker b: nyTabell) {
-            System.out.println(b.getPersonID() + ": " + b.getPoengSum() + " " + b.getFornavn());
+            System.out.println(b.getPersonID() + ": " + b.getPoengSum() + " " + b.getFulltNavn());  // Linda endret (sto getFornavn)
         }
 
     }
