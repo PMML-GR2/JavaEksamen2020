@@ -10,12 +10,14 @@ import java.util.ArrayList;
 
 public class TaskKjørSøk implements Runnable {
     String kjønn;
-    ArrayList<Integer> alder = new ArrayList<>();
+    int minAlder;
+    int maxAlder;
     int personID;
 
    Socket socket;
     DataInputStream innTekst = null;
     DataOutputStream utTekst = null;
+
 
     public TaskKjørSøk(Socket socket){
         this.socket = socket;
@@ -27,26 +29,17 @@ public class TaskKjørSøk implements Runnable {
         try {
                 System.out.println("Bruker gjør ett søk");
 
-                int minAlder;
-                int maxAlder;
-
                 //Lag dataOutput til klient
                 innTekst = new DataInputStream(socket.getInputStream());
                 utTekst = new DataOutputStream(socket.getOutputStream());
 
-                //Skriv til klienten
+                //Hent fra klienten
                 kjønn = innTekst.readUTF();
                 personID = innTekst.readInt();
                 minAlder = innTekst.readInt();
                 maxAlder = innTekst.readInt();
-
-                //Splitt String og legg inn i ArrayList
-                System.out.println(minAlder + " " + maxAlder);
-
-                alder.add(minAlder);
-                alder.add(maxAlder);
-
-                DatingDB.selectTableWhere(personID,kjønn,alder);
+                System.out.println(kjønn + " " +personID + " " + minAlder + " " + maxAlder);
+                DatingDB.søkMatch(personID,kjønn,minAlder,maxAlder);
 
 
         } catch (IOException e) {
