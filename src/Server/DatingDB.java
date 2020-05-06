@@ -149,7 +149,7 @@ public class DatingDB {
     }
        
 
-    // Navn og telefonNr til person som bruker liker blir vist
+    // Legger inn interessert forholdet mellom brukere
    static public void oppdaterInteressert(int PersonID1, int PersonID2) {
        String sql2 = "INSERT INTO interessert VALUES (?,?)";
 
@@ -191,6 +191,7 @@ public class DatingDB {
        return brukerFyll(sql2);
    }
 
+   //Skriver ut alle brukere som pålogget-bruker er interessert i
    static public ArrayList<Bruker> mineValg(int PersonID) {
        ArrayList<Integer> interessert = new ArrayList<>();
 
@@ -216,6 +217,7 @@ public class DatingDB {
            i++;
        }
        System.out.println("MineValg");
+       System.out.println(sql2);
        return brukerFyll(sql2);
    }
            static public void visMineUtsendtInfo(int PersonID) {
@@ -287,6 +289,9 @@ public class DatingDB {
     static public void  selectTableWhere(int personID, String k, ArrayList alder){
        System.out.println("Fant en " + k + " i alder fra " + alder.get(0)+ " - " + alder.get(1)+ " til person " + personID);
     }
+
+
+    //Hjelpemetode for å skrive ut alle brukere som har fulgt en kriterie laget utenfor
     static ArrayList<Bruker> brukerFyll(String sql) {
         Bruker bruker;
         ArrayList<Bruker> brukerListe = new ArrayList<>();
