@@ -15,7 +15,7 @@ public class DatingDB {
         }
         return conn;
     }
-
+    // Registrerer ny bruker
     static public synchronized int registrerBruker(String navn, String kjonn, int alder, ArrayList<String> interesser, String bosted, String tlf) {
         int persID = 0;
         String sql = "INSERT INTO bruker(Navn, Kjonn, Alder, Interesser, Bosted, Tlf) VALUES (?,?,?,?,?,?)";
@@ -44,15 +44,17 @@ public class DatingDB {
         }
         return persID;
     }
-
+    // Søker etter matcher ut i fra like interesser
     static public ArrayList<Bruker> søkMatch(int PersonID, String kjonn, int minAlder, int maxAlder) {
         //Finn brukere
+        if (PersonID != 0) {
         String sql = "SELECT * FROM bruker "
                 + "WHERE Kjonn = " + "'" + kjonn + "'"
                 + " AND Alder BETWEEN " + minAlder + " AND " + maxAlder + " AND PersonID <> " + PersonID;
 
-        ArrayList<Bruker> brukerListe = new ArrayList<>();
-        Bruker eier = minProfil(PersonID);
+            ArrayList<Bruker> brukerListe = new ArrayList<>();
+            Bruker eier = minProfil(PersonID);
+
 
         try (Connection conn = connect();
              Statement stmt = conn.createStatement();
@@ -69,57 +71,49 @@ public class DatingDB {
                 String kuttInteresseTekst = interesseTekst.substring(1, lengde);
                 String[] splitTabell = kuttInteresseTekst.split(",");
 
-                for(String s: splitTabell){
-                    String ord = s;
-                    ord = ord.toLowerCase();
-
-                    ord = ord.trim();
-                    System.out.print(ord+",");
-                }
-
                 brukerListe.add(new Bruker(personID, navn, kjønn, alder, new ArrayList<>(Arrays.asList(splitTabell))));
             }
              }catch(SQLException e){
                 System.out.println(e.getMessage());
             }
-        //Sammenligner interessen til bruker og matcher og sorterer utifra hvor mye de matcher.
-        if(brukerListe.size() != 0) {
-            return sammenligneInteresser(brukerListe, eier);
-        }else return new ArrayList<Bruker>();
-
-    }
+            //Sammenligner interessen til bruker og matcher og sorterer utifra hvor mye de matcher.
+            if (brukerListe.size() != 0) {
+                return sammenligneInteresser(brukerListe, eier);
+            } else return new ArrayList<Bruker>();
+        } else return new ArrayList<Bruker>();
+        }
     // Skriver ut profilinformasjon
     static public Bruker minProfil(int PersonID) {
-        Bruker innloggetBruker = new Bruker();
-        String sql2 = "SELECT * FROM bruker WHERE PersonID = " + PersonID;
+        if (PersonID != 0) {
+            Bruker innloggetBruker = new Bruker();
+            String sql2 = "SELECT * FROM bruker WHERE PersonID = " + PersonID;
 
-        System.out.println(sql2 + "minprofil");
-        try (Connection conn = connect();
-             Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(sql2)) {
-            while (rs.next()) {
-                //Henter all brukerinfoen og legger dem inn i brukertabellen.
-                int personID = rs.getInt("PersonID");
-                String navn = rs.getString("Navn");
-                String kjønn = rs.getString("Kjonn");
-                int alder = rs.getInt("Alder");
-                String interesseTekst = rs.getString("interesser");
-                String bosted = rs.getString("Bosted");
-                String tlfNr = rs.getString("Tlf");
-                int lengde = interesseTekst.length() - 1;
-                String kuttInteresseTekst = interesseTekst.substring(1, lengde);
-                String[] splitTabell = kuttInteresseTekst.split(",");
-                System.out.println("jeg har gått en runde i while");
-                innloggetBruker = new Bruker(personID, navn, kjønn, alder, new ArrayList<>(Arrays.asList(splitTabell)), bosted,tlfNr);
+            System.out.println(sql2 + "minprofil");
+            try (Connection conn = connect();
+                 Statement stmt = conn.createStatement();
+                 ResultSet rs = stmt.executeQuery(sql2)) {
+                while (rs.next()) {
+                    //Henter all brukerinfoen og legger dem inn i brukertabellen.
+                    int personID = rs.getInt("PersonID");
+                    String navn = rs.getString("Navn");
+                    String kjønn = rs.getString("Kjonn");
+                    int alder = rs.getInt("Alder");
+                    String interesseTekst = rs.getString("interesser");
+                    String bosted = rs.getString("Bosted");
+                    String tlfNr = rs.getString("Tlf");
+                    int lengde = interesseTekst.length() - 1;
+                    String kuttInteresseTekst = interesseTekst.substring(1, lengde);
+                    String[] splitTabell = kuttInteresseTekst.split(",");
+                    System.out.println("jeg har gått en runde i while");
+                    innloggetBruker = new Bruker(personID, navn, kjønn, alder, new ArrayList<>(Arrays.asList(splitTabell)), bosted, tlfNr);
+                }
+            } catch (SQLException e) {
+                System.out.println(e.getMessage());
             }
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
-        System.out.println("minProfil");
-        return innloggetBruker;
+            System.out.println("minProfil");
+            return innloggetBruker;
+        } return new Bruker();
     }
-
-
     //Sammenligner interesse med innlogget bruker og skriver ut alle brukerene i sortert rekkefølge
     static public ArrayList<Bruker> sammenligneInteresser(ArrayList<Bruker> brukerTabell, Bruker eier) {
         int i = 0;
@@ -179,64 +173,66 @@ public class DatingDB {
    }
    //Skriver ut alle som liker meg
    static public ArrayList<Bruker> interessertIMeg(int PersonID) {
-        ArrayList<Integer> interessert = new ArrayList<>();
+        if (PersonID != 0) {
+            ArrayList<Integer> interessert = new ArrayList<>();
 
-        String sql = "SELECT * FROM interessert WHERE likerID = " + PersonID;
-       System.out.print("interessert I meg før sql laging " + sql);
+            String sql = "SELECT * FROM interessert WHERE likerID = " + PersonID;
+            System.out.print("interessert I meg før sql laging " + sql);
 
-       try (Connection conn = connect();
-            Statement stmt = conn.createStatement();
-            ResultSet rs = stmt.executeQuery(sql)) {
-           while (rs.next()) {
-               int personID = rs.getInt("bruker_PersonID");
-               interessert.add(personID);
-           }
-       } catch (SQLException e) {
-           System.out.println(e.getMessage());
-       }
-        if (interessert.size() != 0) {
-            String sql2 = "SELECT * from bruker WHERE PersonID = ";
-            int i = 0;
-            for (int ID : interessert) {
-                if (i >= 1)
-                    sql2 += " OR PersonID = " + ID;
-                else
-                    sql2 += ID;
-                i++;
+            try (Connection conn = connect();
+                 Statement stmt = conn.createStatement();
+                 ResultSet rs = stmt.executeQuery(sql)) {
+                while (rs.next()) {
+                    int personID = rs.getInt("bruker_PersonID");
+                    interessert.add(personID);
+                }
+            } catch (SQLException e) {
+                System.out.println(e.getMessage());
             }
-            return brukerFyll(sql2);
-        }
-        else return new ArrayList<>();
+            if (interessert.size() != 0) {
+                String sql2 = "SELECT * from bruker WHERE PersonID = ";
+                int i = 0;
+                for (int ID : interessert) {
+                    if (i >= 1)
+                        sql2 += " OR PersonID = " + ID;
+                    else
+                        sql2 += ID;
+                    i++;
+                }
+                return brukerFyll(sql2);
+            } else return new ArrayList<>();
+        } return new ArrayList<>();
    }
    //Skriver ut alle brukere som pålogget-bruker er interessert i
    static public ArrayList<Bruker> mineValg(int PersonID) {
-       ArrayList<Integer> interessert = new ArrayList<>();
+       if (PersonID != 0) {
+           ArrayList<Integer> interessert = new ArrayList<>();
 
-       String sql = "SELECT * FROM interessert WHERE bruker_PersonID = " + PersonID;
+           String sql = "SELECT * FROM interessert WHERE bruker_PersonID = " + PersonID;
 
-       try (Connection conn = connect();
-            Statement stmt = conn.createStatement();
-            ResultSet rs = stmt.executeQuery(sql)) {
-           while (rs.next()) {
-               int likerID = rs.getInt("likerID");
-               interessert.add(likerID);
+           try (Connection conn = connect();
+                Statement stmt = conn.createStatement();
+                ResultSet rs = stmt.executeQuery(sql)) {
+               while (rs.next()) {
+                   int likerID = rs.getInt("likerID");
+                   interessert.add(likerID);
+               }
+           } catch (SQLException e) {
+               System.out.println(e.getMessage());
            }
-       } catch (SQLException e) {
-           System.out.println(e.getMessage());
-       }
-       if (interessert.size() != 0) {
-           String sql2 = "SELECT * from bruker WHERE PersonID = ";
-           int i = 0;
-           for (int ID : interessert) {
-               if (i >= 1)
-                   sql2 += " OR PersonID = " + ID;
-               else
-                   sql2 += ID;
-               i++;
-           }
-           return brukerFyll(sql2);
-       }
-       else return new ArrayList<>();
+           if (interessert.size() != 0) {
+               String sql2 = "SELECT * from bruker WHERE PersonID = ";
+               int i = 0;
+               for (int ID : interessert) {
+                   if (i >= 1)
+                       sql2 += " OR PersonID = " + ID;
+                   else
+                       sql2 += ID;
+                   i++;
+               }
+               return brukerFyll(sql2);
+           } else return new ArrayList<>();
+       } return new ArrayList<>();
    }
     //Hjelpemetode for å skrive ut alle brukere som har fulgt en kriterie laget utenfor
     static ArrayList<Bruker> brukerFyll(String sql) {

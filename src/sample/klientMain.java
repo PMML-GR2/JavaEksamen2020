@@ -26,6 +26,7 @@ public class klientMain{
     public static void main(String[] args) {
         try{
             hentIDFraTekstFil();
+
             //interessertI("INTERESSERT",tildeltPersonID,11);
             //interessertIMeg("INTERESSERTIMEG", tildeltPersonID, 14);
             sokKlient("SOK","K", tildeltPersonID,18, 70);
@@ -129,14 +130,14 @@ public class klientMain{
 
         interessertI.addAll((ArrayList<Bruker>)lesObjekt.readObject());
 
-        System.out.println(interessertI + "Hallaaaa");
+        System.out.println(interessertI);
 
         lesObjekt.close();
         skrivUt.close();
         socket.close();
 
     }
-    public static void interessertIMeg(String handling,int personID, int likerID) throws IOException,
+    public static void interessertIMeg(String handling,int personID) throws IOException,
             ClassNotFoundException{
 
         socket = new Socket(host,port);
@@ -145,7 +146,6 @@ public class klientMain{
 
         skrivUt.writeUTF(handling);
         skrivUt.writeInt(personID);
-        skrivUt.writeInt(likerID);
 
         lesObjekt = new ObjectInputStream(socket.getInputStream());
 
