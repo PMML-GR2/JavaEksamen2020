@@ -60,7 +60,7 @@ public class Server {
                         visMatch = new TaskHentValg(socket);
                         visMatch.run();
                         break;
-                    case "LOGGINN":
+                    case "LOGIN":
                         System.out.println("Logg Inn Id: " + innTekst.readInt());
                         break;
                 }
