@@ -216,7 +216,7 @@ public class DatingDB {
        }
        return brukerFyll(sql2);
    }
-
+    // Skriver ut hvem bruker er interessert i
    static public ArrayList<Bruker> mineValg(int PersonID) {
        ArrayList<Integer> interessert = new ArrayList<>();
 
@@ -244,57 +244,7 @@ public class DatingDB {
        System.out.println("MineValg");
        return brukerFyll(sql2);
    }
-           static public void visMineUtsendtInfo(int PersonID) {
-       Bruker bruker;
-       ArrayList<Bruker> brukerListe = new ArrayList<>();
 
-        String sql = "SELECT * FROM interessert WHERE likerID = " + PersonID;
-
-       try (Connection conn = connect();
-            Statement stmt = conn.createStatement();
-            ResultSet rs = stmt.executeQuery(sql)) {
-           while (rs.next()) {
-               int personID = rs.getInt("PersonID");
-               String navn = rs.getString("Navn");
-               String kjønn = rs.getString("Kjonn");
-               int alder = rs.getInt("Alder");
-               String interesseTekst = rs.getString("interesser");
-               String bosted = rs.getString("Bosted");
-               String tlfNr = rs.getString("Tlf");
-               int lengde = interesseTekst.length() - 1;
-               String kuttInteresseTekst = interesseTekst.substring(1, lengde);
-               String[] splitTabell = kuttInteresseTekst.split(",");
-
-               bruker = new Bruker(personID, navn, kjønn, alder, new ArrayList<>(Arrays.asList(splitTabell)), bosted, tlfNr);
-               brukerListe.add(bruker);
-           }
-       }
-       catch (SQLException e) {
-           System.out.println(e.getMessage());
-       }
-
-       String sql2 = "SELECT * FROM bruker WHERE PersonID = ";
-        int i = 0;
-               for(Bruker navn : brukerListe) {
-                    if (i>= 1)
-                        sql2 += " OR PersonID = " + navn;
-                    else
-                        sql2 += navn;
-                   i++;
-               }
-
-       try (Connection conn = connect();
-            Statement stmt = conn.createStatement();
-            ResultSet rs = stmt.executeQuery(sql2)) {
-           while (rs.next()) {
-               System.out.println(rs.getString("PersonID"));
-           }
-       }
-       catch (SQLException e) {
-           System.out.println(e.getMessage());
-       }
-   }
-  
    static public void visInteresser() {
         String sql = "SELECT Interesser FROM bruker";
 
