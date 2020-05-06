@@ -1,16 +1,13 @@
 package Server;
 
-import sample.Bruker;
+import client.Bruker;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
-import java.lang.reflect.Array;
-import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.Collections;
 
 public class TaskHentValg implements Runnable {
     int SpørrID;

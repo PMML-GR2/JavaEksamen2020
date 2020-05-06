@@ -1,4 +1,4 @@
-package sample;
+package client;
 
 import javafx.application.Application;
 import javafx.geometry.Insets;
@@ -10,7 +10,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 
 public class Main extends Application {
@@ -18,7 +17,6 @@ public class Main extends Application {
 
     private Stage primaryStage;
     private Button registrerKnapp;
-    private Button minProfil;
     private Button finnMatch;
     private Button mineMatcher;
     private Button interesserte;
@@ -30,12 +28,12 @@ public class Main extends Application {
     private Label appNavn;
     private BorderPane mainPane;
     private HBox menu;
-
-
+    private Bruker bruker;
     private RegPane regPane;
-    private ProfilePane profilePane;
-    private InteressertPane interessertPane;
     private FinnMatchPane finnMatchPane;
+    private MineMatchPane mineMatchPane;
+    private PersValgtMegPane persValgtMegPane;
+
 
     public static void main(String[] args) {
 
@@ -69,34 +67,41 @@ public class Main extends Application {
 
         mainPane = new BorderPane();
         mainPane.setStyle("-fx-background-color:#ededed;");
-        //mainPane.setPadding(new Insets(10, 10, 10, 10));
         menu = new HBox();
-        profilKnapp();
         registrerKnapp();
         finnMatchKnapp();
         mineMatcherKnapp();
         intImegKnapp();
         appNavn = new Label("DateMe");
-        appNavn.setPadding(new Insets(5,20,0,0));
+        appNavn.setPadding(new Insets(5, 20, 0, 0));
         appNavn.setFont(
                 Font.font("Verdana",
                         22)
         );
-        menu.getChildren().addAll(appNavn, registrerKnapp, minProfil, finnMatch, mineMatcher, interesserte);
+        menu.getChildren().addAll(appNavn, registrerKnapp, finnMatch, mineMatcher, interesserte);
         menu.setStyle("-fx-background-color:#ce93a2;");
-        menu.setPadding(new Insets(20, 10, 20, 10));
+        menu.setPadding(new Insets(10, 10, 8, 10));
 
+
+        bruker = new Bruker();
+        regPane = new RegPane();
+        finnMatchPane = new FinnMatchPane(mainPane);
+        mineMatchPane = new MineMatchPane();
+        persValgtMegPane = new PersValgtMegPane();
 
         mainPane.setTop(menu);
-      
-        regPane = new RegPane();
-        interessertPane = new InteressertPane();
-        finnMatchPane = new FinnMatchPane();
-        profilePane = new ProfilePane();
-       
 
-        primaryStage.setTitle("Registrering");
-        primaryStage.setScene(new Scene(mainPane, 750, 850));
+        if (DataService.getInstance().brukerErRegistrert()) {
+            mainPane.setCenter(finnMatchPane);
+        }
+        else {
+            mainPane.setCenter(regPane);
+        }
+
+
+
+        primaryStage.setTitle("DateMe");
+        primaryStage.setScene(new Scene(mainPane, 800, 800));
         primaryStage.show();
 
     }
@@ -111,36 +116,26 @@ public class Main extends Application {
         });
     }
 
-    private void profilKnapp() {
-        minProfil = new Button("Min profil", imageView0);
-        minProfil.setPadding(new Insets(2, 4, 2, 4));
-        minProfil.setStyle("-fx-background-color:transparent;");
-        minProfil.setOnAction(event -> {
-            primaryStage.setTitle("Min profil");
-            mainPane.setCenter(profilePane);
-        });
-    }
-
-
     private void finnMatchKnapp() {
 
-        finnMatch = new Button("Finn match", imageView1);
+        finnMatch = new Button("Finn kjærligheten", imageView1);
         finnMatch.setPadding(new Insets(2, 4, 2, 4));
         finnMatch.setStyle("-fx-background-color:transparent;");
         finnMatch.setOnAction(event -> {
-            primaryStage.setTitle("Finn match");
+            primaryStage.setTitle("Finn kjærligheten");
             mainPane.setCenter(finnMatchPane);
         });
 
     }
 
     private void mineMatcherKnapp() {
-        mineMatcher = new Button("Mine matcher", imageView2);
+        mineMatcher = new Button("Mine utvalgte", imageView2);
         mineMatcher.setPadding(new Insets(2, 4, 2, 4));
         mineMatcher.setStyle("-fx-background-color:transparent;");
         mineMatcher.setOnAction(event -> {
-            primaryStage.setTitle("Matchet med meg");
-            mainPane.setCenter(interessertPane);
+            primaryStage.setTitle("Mine utvalgte");
+            mainPane.setCenter(mineMatchPane);
+            mineMatchPane.printMineMatcher();
         });
     }
 
@@ -150,7 +145,9 @@ public class Main extends Application {
         interesserte.setStyle("-fx-background-color:transparent;");
         interesserte.setOnAction(event -> {
             primaryStage.setTitle("interessert i meg");
-            mainPane.setCenter(interessertPane);
+            mainPane.setCenter(persValgtMegPane);
+            persValgtMegPane.printValgtMeg();
         });
     }
+
 }
