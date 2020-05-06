@@ -31,7 +31,7 @@ public class TaskBrukerLogin implements Runnable {
 
             //Lag dataOutput til klient
             innTekst = new DataInputStream(socket.getInputStream());
-            utTekst = new DataOutputStream(socket.getOutputStream());
+            //utTekst = new DataOutputStream(socket.getOutputStream());
             outObject = new ObjectOutputStream(socket.getOutputStream());
 
             personID = innTekst.readInt();
@@ -48,8 +48,8 @@ public class TaskBrukerLogin implements Runnable {
             e.printStackTrace();
         } finally {
             try {
-                utTekst.close();
                 innTekst.close();
+                outObject.close();
             } catch (IOException e) {
                 e.printStackTrace();
             }

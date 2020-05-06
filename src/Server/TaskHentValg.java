@@ -39,14 +39,12 @@ public class TaskHentValg implements Runnable {
             SpørrID = innTekst.readInt();
             VisID = innTekst.readInt();
 
-
             System.out.println("ID'r: " + SpørrID + " "  + VisID);
 
             //Legger inn interessert forholdet mellom brukere
             DatingDB.oppdaterInteressert(SpørrID, VisID);
             //Skriver ut alle brukere som er lagret i db som interresant.
             brukerListe = DatingDB.mineValg(SpørrID);
-
 
             outObject.writeObject(brukerListe);
             System.out.println("TASK");

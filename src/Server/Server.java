@@ -65,7 +65,6 @@ public class Server {
                         System.out.println("Logg Inn Id: ");
                         loginBruker = new TaskBrukerLogin(socket);
                         loginBruker.run();
-
                         break;
                 }
             }
