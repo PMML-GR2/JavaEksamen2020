@@ -3,7 +3,12 @@ import java.sql.*;
 import java.util.*;
 import sample.Bruker;
 
+//database klassen - Tar seg av all kobling mot databasen og
+//sender ut resultat til Task klassene som tar seg av socket kommunikasjon
 public class DatingDB {
+
+
+    //kobler seg til databasen
     public static Connection connect() {
         String url = "jdbc:sqlite:C://SKOLE/emneOBJ2000/dbeksamen/datingdb.db";
         Connection conn = null;
@@ -15,6 +20,8 @@ public class DatingDB {
         }
         return conn;
     }
+
+
     // Registrerer ny bruker
     static public synchronized int registrerBruker(String navn, String kjonn, int alder, ArrayList<String> interesser, String bosted, String tlf) {
         int persID = 0;
@@ -44,6 +51,8 @@ public class DatingDB {
         }
         return persID;
     }
+
+
     // Søker etter matcher ut i fra like interesser
     static public ArrayList<Bruker> søkMatch(int PersonID, String kjonn, int minAlder, int maxAlder) {
         //Finn brukere
@@ -76,12 +85,16 @@ public class DatingDB {
              }catch(SQLException e){
                 System.out.println(e.getMessage());
             }
+
+
             //Sammenligner interessen til bruker og matcher og sorterer utifra hvor mye de matcher.
             if (brukerListe.size() != 0) {
                 return sammenligneInteresser(brukerListe, eier);
             } else return new ArrayList<Bruker>();
         } else return new ArrayList<Bruker>();
         }
+
+
     // Skriver ut profilinformasjon
     static public Bruker minProfil(int PersonID) {
         if (PersonID != 0) {
@@ -114,6 +127,8 @@ public class DatingDB {
             return innloggetBruker;
         } return new Bruker();
     }
+
+
     //Sammenligner interesse med innlogget bruker og skriver ut alle brukerene i sortert rekkefølge
     static public ArrayList<Bruker> sammenligneInteresser(ArrayList<Bruker> brukerTabell, Bruker eier) {
         int i = 0;
@@ -157,6 +172,8 @@ public class DatingDB {
         }
         return nyTabell;
     }
+
+
     // Legger inn interessert forholdet mellom brukere
    static public void oppdaterInteressert(int PersonID1, int PersonID2) {
        String sql2 = "INSERT INTO interessert VALUES (?,?)";
@@ -171,6 +188,8 @@ public class DatingDB {
            System.out.println(e.getMessage());
        }
    }
+
+
    //Skriver ut alle som liker meg
    static public ArrayList<Bruker> interessertIMeg(int PersonID) {
         if (PersonID != 0) {
@@ -203,6 +222,8 @@ public class DatingDB {
             } else return new ArrayList<>();
         } return new ArrayList<>();
    }
+
+
    //Skriver ut alle brukere som pålogget-bruker er interessert i
    static public ArrayList<Bruker> mineValg(int PersonID) {
        if (PersonID != 0) {
@@ -234,6 +255,8 @@ public class DatingDB {
            } else return new ArrayList<>();
        } return new ArrayList<>();
    }
+
+
     //Hjelpemetode for å skrive ut alle brukere som har fulgt en kriterie laget utenfor
     static ArrayList<Bruker> brukerFyll(String sql) {
         Bruker bruker;

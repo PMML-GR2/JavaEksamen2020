@@ -7,6 +7,7 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
 
+//Skriver ut alle brukere som innlogget bruker er interessert i
 public class TaskHentValg implements Runnable {
     int SpørrID;
     int VisID;

@@ -6,6 +6,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 
+//Server venter på bruker forespørsel fra klient og utfører metoder i serveren utifra hvilken handling klient etterspør
 public class Server {
 
     //initialiserer server variablene
@@ -34,6 +35,7 @@ public class Server {
                 handling = innTekst.readUTF();
                 System.out.println(handling);
 
+                //Velger det som bruker har bedt om
                 switch (handling) {
                     case "REGISTRER":
                         System.out.println("Dette er REGISTER");

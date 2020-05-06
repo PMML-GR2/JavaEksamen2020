@@ -7,6 +7,7 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
 
+//skriver ut alle brukere i systemet som har trykket seg innteressert i innlogget bruker
 public class TaskHentInteresserte implements Runnable {
     int personID;
     ArrayList<Bruker> brukerListe = new ArrayList<>();
