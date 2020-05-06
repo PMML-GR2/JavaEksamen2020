@@ -7,8 +7,6 @@ import java.io.ObjectOutputStream;
 import java.util.*;
 import java.util.ArrayList;
 
-
-
 public class klientMain{
     static String host = "localhost";
     static int port = 8000;
@@ -40,14 +38,14 @@ public class klientMain{
     }
     static public void oppStart(String handling, int tildeltPersonID) throws IOException, ClassNotFoundException {
         if (tildeltPersonID != 0) {
+            //System.out.print("Jeg er inni her");
             socket = new Socket(host,port);
-            lesObjekt = new ObjectInputStream(socket.getInputStream());
             skrivUt = new DataOutputStream(socket.getOutputStream());
 
             skrivUt.writeUTF(handling);
             skrivUt.writeInt(tildeltPersonID);
-            lesObjekt.readObject();
 
+            lesObjekt = new ObjectInputStream(socket.getInputStream());
             interessertI.addAll((ArrayList<Bruker>)lesObjekt.readObject());
             likerMeg.addAll((ArrayList<Bruker>)lesObjekt.readObject());
             bruker = (Bruker)lesObjekt.readObject();
@@ -61,6 +59,7 @@ public class klientMain{
             socket.close();
         }
     }
+
     static public void registrerBruker(String handling,String navn, String kjonn, int alder, String interesser,String by, String tlf) throws IOException,
             ClassNotFoundException{
 
@@ -176,7 +175,6 @@ public class klientMain{
 
         System.out.println(id);
         tildeltPersonID = id;
-        skrivUt.writeUTF("LOGGINN");
         skrivUt.writeInt(id);
 
         skrivUt.close();

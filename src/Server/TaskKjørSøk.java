@@ -1,5 +1,7 @@
 package Server;
 
+import sample.Bruker;
+
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -17,7 +19,7 @@ public class TaskKjørSøk implements Runnable {
    Socket socket;
     DataInputStream innTekst = null;
     DataOutputStream utTekst = null;
-    ArrayList<Bruker>
+    ArrayList<Bruker> brukerListe;
 
     public TaskKjørSøk(Socket socket){
         this.socket = socket;
