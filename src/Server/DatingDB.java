@@ -48,33 +48,32 @@ public class DatingDB {
     static public ArrayList<Bruker> søkMatch(int PersonID, String kjonn, int minAlder, int maxAlder) {
         //Finn brukere
         if (PersonID != 0) {
-            String sql = "SELECT * FROM bruker "
-                    + "WHERE Kjonn = " + "'" + kjonn + "'"
-                    + " AND Alder BETWEEN " + minAlder + " AND " + maxAlder + " AND PersonID <> " + PersonID
-                    + " LIMIT 10;";
+        String sql = "SELECT * FROM bruker "
+                + "WHERE Kjonn = " + "'" + kjonn + "'"
+                + " AND Alder BETWEEN " + minAlder + " AND " + maxAlder + " AND PersonID <> " + PersonID;
 
             ArrayList<Bruker> brukerListe = new ArrayList<>();
             Bruker eier = minProfil(PersonID);
 
-            try (Connection conn = connect();
-                 Statement stmt = conn.createStatement();
-                 ResultSet rs = stmt.executeQuery(sql)) {
-                while (rs.next()) {
-                    //Henter all brukerinfoen og legger dem inn i brukertabellen.
-                    int personID = rs.getInt("PersonID");
-                    String navn = rs.getString("Navn");
-                    String kjønn = rs.getString("Kjonn");
-                    int alder = rs.getInt("Alder");
-                    String interesseTekst = rs.getString("interesser");
-                    String bosted = rs.getString("Bosted");
-                    String tlfNr = rs.getString("Tlf");
-                    int lengde = interesseTekst.length() - 1;
-                    String kuttInteresseTekst = interesseTekst.substring(1, lengde);
-                    String[] splitTabell = kuttInteresseTekst.split(",");
 
-                    brukerListe.add(new Bruker(personID, navn, kjønn, alder, new ArrayList<>(Arrays.asList(splitTabell)), bosted, tlfNr));
-                }
-            } catch (SQLException e) {
+        try (Connection conn = connect();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
+            while (rs.next()) {
+                //Henter all brukerinfoen og legger dem inn i brukertabellen.
+                int personID = rs.getInt("PersonID");
+                String navn = rs.getString("Navn");
+                String kjønn = rs.getString("Kjonn");
+                int alder = rs.getInt("Alder");
+                String interesseTekst = rs.getString("interesser");
+
+                int lengde = interesseTekst.length() - 1;
+                String kuttInteresseTekst = interesseTekst.substring(1, lengde);
+                String[] splitTabell = kuttInteresseTekst.split(",");
+
+                brukerListe.add(new Bruker(personID, navn, kjønn, alder, new ArrayList<>(Arrays.asList(splitTabell))));
+            }
+             }catch(SQLException e){
                 System.out.println(e.getMessage());
             }
             //Sammenligner interessen til bruker og matcher og sorterer utifra hvor mye de matcher.
@@ -127,9 +126,11 @@ public class DatingDB {
             int poeng = 0;
             brukerInteresse.addAll(b.getInterresser());
             for (String s : eierInteresse) {
-                s.trim();
+                s = s.trim();
+                s = s.toLowerCase();
                 for (String j : brukerInteresse) {
-                    j.trim();
+                    j = j.trim();
+                    j = j.toLowerCase();
                     if (s.equals(j)) {
                         b.setPoengSum(b.getPoengSum() + 1);
                     }
@@ -139,7 +140,17 @@ public class DatingDB {
             nyTabell.add(b);
         }
 
+        //sorterer de etter poeng
         Collections.sort(nyTabell,Collections.reverseOrder());
+
+        //Skriv ut bare top 10;
+        if(nyTabell.size() > 10){
+            int fjern = nyTabell.size() - 10;
+            while(fjern != 0){
+                nyTabell.remove(nyTabell.size()-1);
+                fjern--;
+            }
+        }
 
         for(Bruker b: nyTabell) {
             System.out.println(b.getPersonID() + ": " + b.getPoengSum() + " " + b.getFornavn());

@@ -26,10 +26,11 @@ public class klientMain{
     public static void main(String[] args) {
         try{
             hentIDFraTekstFil();
-            //interessertI("INTERESSERT",13,3);
-            //interessertIMeg("INTERESSERTIMEG", tildeltPersonID);
-            //sokKlient("SOK","M", tildeltPersonID,18, 70);
-            //registrerBruker("REGISTRER","Frode", "M", 33,"data","Harmar","47585858");
+
+            //interessertI("INTERESSERT",tildeltPersonID,11);
+            //interessertIMeg("INTERESSERTIMEG", tildeltPersonID, 14);
+            sokKlient("SOK","K", tildeltPersonID,18, 70);
+            //registrerBruker("REGISTRER","Idsa", "M", 25,"musikk,Hest,Steinkasting","Porsgrunn","323352352");
             //oppStart("LOGIN", tildeltPersonID);
         }catch(IOException ex){
             //Kanskje skrive en besked i GUI om at man har skrevet inn ulovlig/feil informasjon???
@@ -164,7 +165,7 @@ public class klientMain{
 
         try{
             //skriv inn en filepath som passer deg
-            File fil = new File("C:\\SKOLE\\emneOBJ2000\\eksamenstesting\\personID.txt");
+            File fil = new File("C:\\Users\\loren\\OneDrive\\Desktop\\Skolestuff\\OBJProgsemester2\\personID.txt");
             if(!fil.exists()){
                 PrintWriter utSkriv = new PrintWriter(fil);
                 //tildeltPersonID = personID; ??
@@ -172,17 +173,14 @@ public class klientMain{
                 utSkriv.close();
             }
 
-
         }catch(FileNotFoundException ex){ex.printStackTrace(); }
         System.out.println("Skrivet til fil " + personID);
-
     }
 
 
     static public void hentIDFraTekstFil() throws IOException, ClassNotFoundException{
-
         //skriv inn en filepath som passer deg
-        File fil = new File("C:\\SKOLE\\emneOBJ2000\\eksamenstesting\\personID.txt");
+        File fil = new File("C:\\Users\\loren\\OneDrive\\Desktop\\Skolestuff\\OBJProgsemester2\\personID.txt");
         Scanner skanner = new Scanner(fil);
         socket = new Socket(host,port);
         skrivUt = new DataOutputStream(socket.getOutputStream());
