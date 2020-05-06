@@ -16,6 +16,7 @@ public class klientMain{
     static ArrayList<Bruker> interessertI = new ArrayList<>();
     static ArrayList<Bruker> likerMeg = new ArrayList<>();
     static Bruker bruker;
+    //static DataService dataservice;
 
     static DataOutputStream skrivUt;
     static DataInputStream hentTekst;
@@ -26,7 +27,7 @@ public class klientMain{
     public static void main(String[] args) {
         try{
             hentIDFraTekstFil();
-            oppStart("LOGIN", tildeltPersonID);
+            oppStart("LOGIN");
             //interessertI("INTERESSERT",tildeltPersonID,11);
             //interessertIMeg("INTERESSERTIMEG", tildeltPersonID);
             //sokKlient("SOK","K", tildeltPersonID,18, 70);
@@ -39,9 +40,10 @@ public class klientMain{
             ex2.printStackTrace();
         }
     }
-    static public void oppStart(String handling, int tildeltPersonID) throws IOException, ClassNotFoundException {
+    static public void oppStart(String handling) throws IOException, ClassNotFoundException {
         if (tildeltPersonID != 0) {
             //System.out.print("Jeg er inni her");
+            DataService dataservice = DataService.getInstance();
             socket = new Socket(host,port);
             skrivUt = new DataOutputStream(socket.getOutputStream());
 
@@ -53,6 +55,10 @@ public class klientMain{
             interessertI.addAll((ArrayList<Bruker>)lesObjekt.readObject());
             likerMeg.addAll((ArrayList<Bruker>)lesObjekt.readObject());
             bruker = (Bruker)lesObjekt.readObject();
+
+            dataservice.setLagtTilBruker(interessertI);
+            dataservice.setBrukerHarLagtTil(likerMeg);
+            dataservice.setBruker(bruker);
 
             System.out.println(interessertI);
             System.out.println(likerMeg);
@@ -70,7 +76,6 @@ public class klientMain{
         socket = new Socket(host,port);
         skrivUt = new DataOutputStream(socket.getOutputStream());
         hentTekst = new DataInputStream(socket.getInputStream());
-        int tildeltPersonID = 0;
 //skrivHandle = new ObjectOutputStream(socket.getOutputStream());
 
         skrivUt.writeUTF(handling);
@@ -87,13 +92,16 @@ public class klientMain{
         tildeltPersonID = hentTekst.readInt();
         skrivTilTekstFil(tildeltPersonID);
 
+        System.out.println(tildeltPersonID);
+        oppStart("LOGIN");
+
         hentTekst.close();
         skrivUt.close();
         socket.close();
 //skrivHandle.close();
     }
 
-    static public void sokKlient(String handling, String kjonn, int personID,int miniAlder, int maxAlder)  throws IOException,
+    static public void sokKlient(String handling, String kjonn, int miniAlder, int maxAlder)  throws IOException,
             ClassNotFoundException{
 
         socket = new Socket(host,port);
@@ -107,9 +115,11 @@ public class klientMain{
 
         lesObjekt = new ObjectInputStream(socket.getInputStream());
 
-        søkTreff.addAll((ArrayList<Bruker>)lesObjekt.readObject());
+        System.out.println(handling+ " " + kjonn+ " " +miniAlder+ " " +maxAlder);
+        //søkTreff.addAll((ArrayList<Bruker>)lesObjekt.readObject());
 
         System.out.println("SøkResultat: " + søkTreff);
+        DataService.getInstance().setMatchBrukere((ArrayList<Bruker>)lesObjekt.readObject());
 
         lesObjekt.close();
         skrivUt.close();
@@ -161,11 +171,9 @@ public class klientMain{
 
     //skriver personID til en tekstfil på klientens pc.
     static public void skrivTilTekstFil(int personID){
-
-
         try{
             //skriv inn en filepath som passer deg
-            File fil = new File("C:\\Users\\loren\\OneDrive\\Desktop\\Skolestuff\\OBJProgsemester2\\personID.txt");
+            File fil = new File("C:\\SKOLE\\emneOBJ2000\\eksamenstesting\\personID.txt");
             if(!fil.exists()){
                 PrintWriter utSkriv = new PrintWriter(fil);
                 //tildeltPersonID = personID; ??
@@ -178,24 +186,27 @@ public class klientMain{
     }
 
 
-    static public void hentIDFraTekstFil() throws IOException, ClassNotFoundException{
+    static public boolean hentIDFraTekstFil() throws IOException, ClassNotFoundException{
         //skriv inn en filepath som passer deg
-        File fil = new File("C:\\Users\\loren\\OneDrive\\Desktop\\Skolestuff\\OBJProgsemester2\\personID.txt");
-        Scanner skanner = new Scanner(fil);
-        socket = new Socket(host,port);
-        skrivUt = new DataOutputStream(socket.getOutputStream());
-        int id = 0;
-        while(skanner.hasNext()){
-            id = skanner.nextInt();
-        }
+        File fil = new File("C:\\SKOLE\\emneOBJ2000\\eksamenstesting\\personID.txt");
+        if(fil.exists()) {
+            Scanner skanner = new Scanner(fil);
+            socket = new Socket(host, port);
+            skrivUt = new DataOutputStream(socket.getOutputStream());
+            int id = 0;
+            while (skanner.hasNext()) {
+                id = skanner.nextInt();
+            }
 
-        System.out.println(id);
-        tildeltPersonID = id;
+            System.out.println(id);
+            tildeltPersonID = id;
 
-        skrivUt.writeInt(id);
+            skrivUt.writeInt(id);
 
-        skrivUt.close();
-        skanner.close();
+            skrivUt.close();
+            skanner.close();
+            return true;
+        }else return false;
     }
 
 }

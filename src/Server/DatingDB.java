@@ -75,12 +75,14 @@ public class DatingDB {
                 String kjønn = rs.getString("Kjonn");
                 int alder = rs.getInt("Alder");
                 String interesseTekst = rs.getString("interesser");
+                String bosted = rs.getString("Bosted");
+                String tlf = rs.getString("Tlf");
 
                 int lengde = interesseTekst.length() - 1;
                 String kuttInteresseTekst = interesseTekst.substring(1, lengde);
                 String[] splitTabell = kuttInteresseTekst.split(",");
 
-                brukerListe.add(new Bruker(personID, navn, kjønn, alder, new ArrayList<>(Arrays.asList(splitTabell))));
+                brukerListe.add(new Bruker(personID, navn, kjønn, alder, new ArrayList<>(Arrays.asList(splitTabell)),bosted,tlf));
             }
              }catch(SQLException e){
                 System.out.println(e.getMessage());
@@ -123,7 +125,6 @@ public class DatingDB {
             } catch (SQLException e) {
                 System.out.println(e.getMessage());
             }
-            System.out.println("minProfil");
             return innloggetBruker;
         } return new Bruker();
     }
@@ -196,7 +197,6 @@ public class DatingDB {
             ArrayList<Integer> interessert = new ArrayList<>();
 
             String sql = "SELECT * FROM interessert WHERE likerID = " + PersonID;
-            System.out.print("interessert I meg før sql laging " + sql);
 
             try (Connection conn = connect();
                  Statement stmt = conn.createStatement();
@@ -218,6 +218,7 @@ public class DatingDB {
                         sql2 += ID;
                     i++;
                 }
+                System.out.println(sql+sql2 + "InteressertiMeg");
                 return brukerFyll(sql2);
             } else return new ArrayList<>();
         } return new ArrayList<>();
@@ -251,6 +252,7 @@ public class DatingDB {
                        sql2 += ID;
                    i++;
                }
+               System.out.println(sql+sql2 + "mineValg");
                return brukerFyll(sql2);
            } else return new ArrayList<>();
        } return new ArrayList<>();

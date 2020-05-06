@@ -30,9 +30,11 @@ public class TaskBrukerLogin implements Runnable {
 
             //bruker metodene i DatingDB for å behandle dataene med sqli
             minBruker = DatingDB.minProfil(personID);
+            System.out.println("minbruker" + minBruker);
             interessertI = DatingDB.mineValg(personID);
+            System.out.println("interesserti" + interessertI);
             likerMeg = DatingDB.interessertIMeg(personID);
-
+            System.out.println("likermeg" + likerMeg);
             //Skriver ut arraylist
             outObject.writeObject(interessertI);
             outObject.writeObject(likerMeg);

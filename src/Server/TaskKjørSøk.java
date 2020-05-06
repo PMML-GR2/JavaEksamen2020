@@ -38,7 +38,7 @@ public class TaskKjørSøk implements Runnable {
                 personID = innTekst.readInt();
                 minAlder = innTekst.readInt();
                 maxAlder = innTekst.readInt();
-                System.out.println(kjønn + " " +personID + " " + minAlder + " " + maxAlder);
+                System.out.println(kjønn + " " + personID + " " + minAlder + " " + maxAlder);
 
                 brukerListe.addAll(DatingDB.søkMatch(personID,kjønn,minAlder,maxAlder));
 

@@ -4,13 +4,16 @@ import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 
+import java.io.IOException;
 import java.util.Arrays;
 
 public class RegPane extends VBox {
+    private BorderPane mainPane;
     private Label overskrift;
     private Label labelFulltnavn;
     private TextField textFieldFulltnavn;
@@ -26,9 +29,12 @@ public class RegPane extends VBox {
     private TextField textFieldTlfNr;
     private Button lagreKnapp;
     private DataService dataService;
+    private ProfilePane profilePane;
 
 
     public RegPane() {
+        this.mainPane = mainPane;
+
         setStyle("-fx-border-color: black");
         setPadding(new Insets(20, 100, 20, 220));
 
@@ -92,27 +98,25 @@ public class RegPane extends VBox {
         lagreKnapp.setStyle("-fx-background-color:#ce93a2;");
         lagreKnapp.setPrefSize(150, 35);
         lagreKnapp.setOnAction(event -> {
-            lagre();
+                try {
+                    lagre();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
+                }
+
+            //mainPane.setCenter(mainPane);
         });
 
         getChildren().add(lagreKnapp);
 
     }
 
-    private Bruker registrerNyBruker() {
-        Bruker nyBruker = new Bruker();
-        nyBruker.setFulltNavn(textFieldFulltnavn.getText());
-        nyBruker.setKjonn(textfieldKjonn.getText());
-        nyBruker.setAlder(Integer.parseInt(textFieldAlder.getText()));
-        nyBruker.setInterresser(Arrays.asList(textFieldinterresser.getText().split(",")));
-        nyBruker.setBosted(textFieldbosted.getText());
-        nyBruker.setTlfNr(textFieldTlfNr.getText());
-
-        return nyBruker;
-    }
-
-    public void lagre() {
-        dataService.registrerNyBruker(registrerNyBruker());
+    public void lagre() throws IOException, ClassNotFoundException {
+        klientMain.registrerBruker("REGISTRER",textFieldFulltnavn.getText(), textfieldKjonn.getText(),
+                Integer.parseInt(textFieldAlder.getText()), textFieldinterresser.getText(),textFieldbosted.getText(),
+                textFieldTlfNr.getText());
 
     }
 

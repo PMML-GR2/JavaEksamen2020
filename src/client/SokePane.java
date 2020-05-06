@@ -9,6 +9,8 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
+import java.io.IOException;
+
 
 public class SokePane extends BorderPane {
 
@@ -97,13 +99,27 @@ public class SokePane extends BorderPane {
             sok.setFraAlder(Integer.parseInt(sokAlderFelt1.getText()));
             sok.setTilAlder(Integer.parseInt(sokAlderFelt2.getText()));
 
+            String kjønn = "K";
+            if(sok.isMann()){
+                kjønn = "M";
+            }
+            try {
+                klientMain.sokKlient("SOK",kjønn,
+                        Integer.parseInt(sokAlderFelt1.getText()), Integer.parseInt(sokAlderFelt2.getText()));
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+
+
             interessertListPane.getChildren().clear();
             dataService.getMatchBrukere().stream()
-                    .filter(bruker -> sok.isBeggeKjonn() || bruker.getKjonn().equals(sok.isMann() ? "Mann" : "Kvinne"))
-                    .filter(bruker -> bruker.getAlder() >= sok.getFraAlder() && bruker.getAlder() <= sok.getTilAlder())
+                    //.filter(bruker -> sok.isBeggeKjonn() || bruker.getKjonn().equals(sok.isMann() ? "Mann" : "Kvinne"))
+                    //.filter(bruker -> bruker.getAlder() >= sok.getFraAlder() && bruker.getAlder() <= sok.getTilAlder())
                     .forEach(bruker -> {
-                interessertListPane.addInteressert(new InteressertPane(bruker, this.mainPane));
-            });
+                        interessertListPane.addInteressert(new InteressertPane(bruker, this.mainPane));
+                    });
         });
 
 

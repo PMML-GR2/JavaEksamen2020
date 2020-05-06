@@ -18,12 +18,13 @@ public class Bruker implements Comparable, Serializable {
 
     }
 
-    public Bruker(int personID, String fulltNavn, String kjonn, int alder, ArrayList interresser) {
+    public Bruker(int personID, String fulltNavn, String kjonn, int alder, ArrayList interresser, String bosted) {
         this.personID = personID;
         this.fulltNavn = fulltNavn;
         this.kjonn = kjonn;
         this.alder = alder;
         this.interresser = interresser;
+        this.bosted = bosted;
     }
 
 

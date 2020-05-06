@@ -12,6 +12,8 @@ import javafx.scene.layout.HBox;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
+import java.io.IOException;
+
 public class Main extends Application {
 
 
@@ -35,9 +37,20 @@ public class Main extends Application {
     private PersValgtMegPane persValgtMegPane;
 
 
-    public static void main(String[] args) {
+    public static void main(String[] args)  {
+        try {
+            klientMain.hentIDFraTekstFil();
+            klientMain.oppStart("LOGIN");
+            System.out.println("patrick");
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+        catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+            launch(args);
 
-        launch(args);
     }
 
     @Override
@@ -91,7 +104,7 @@ public class Main extends Application {
 
         mainPane.setTop(menu);
 
-        if (DataService.getInstance().brukerErRegistrert()) {
+        if (klientMain.hentIDFraTekstFil()) {
             mainPane.setCenter(finnMatchPane);
         }
         else {
