@@ -40,14 +40,18 @@ public class klientMain{
     }
     static public void oppStart(String handling, int tildeltPersonID) throws IOException, ClassNotFoundException {
         if (tildeltPersonID != 0) {
+            //System.out.print("Jeg er inni her");
             socket = new Socket(host,port);
-            lesObjekt = new ObjectInputStream(socket.getInputStream());
             skrivUt = new DataOutputStream(socket.getOutputStream());
 
             skrivUt.writeUTF(handling);
             skrivUt.writeInt(tildeltPersonID);
-            lesObjekt.readObject();
 
+            lesObjekt = new ObjectInputStream(socket.getInputStream());
+
+            interessertI.addAll((ArrayList<Bruker>)lesObjekt.readObject());
+
+            lesObjekt = new ObjectInputStream(socket.getInputStream());
             interessertI.addAll((ArrayList<Bruker>)lesObjekt.readObject());
             likerMeg.addAll((ArrayList<Bruker>)lesObjekt.readObject());
             bruker = (Bruker)lesObjekt.readObject();
@@ -120,23 +124,15 @@ public class klientMain{
         skrivUt.writeInt(personID);
         skrivUt.writeInt(likerID);
 
-        lesObjekt = new ObjectInputStream(socket.getInputStream());
+       // lesObjekt = new ObjectInputStream(socket.getInputStream());
 
-        interessertI.addAll((ArrayList<Bruker>)lesObjekt.readObject());
+        //interessertI.addAll((ArrayList<Bruker>)lesObjekt.readObject());
 
-        System.out.println(interessertI + "Hallaaaa");
+        //System.out.println(interessertI + "Hallaaaa");
 
-        lesObjekt.close();
+        //lesObjekt.close();
         skrivUt.close();
         socket.close();
-
-    }
-
-    public static void sendObjekt(String handling,int personID, int likerID) throws IOException,
-            ClassNotFoundException{
-
-        lesObjekt = new ObjectInputStream(socket.getInputStream());
-        interessertI.addAll((ArrayList<Bruker>)lesObjekt.readObject());
 
     }
 
@@ -147,7 +143,7 @@ public class klientMain{
 
         try{
             //skriv inn en filepath som passer deg
-            File fil = new File("C:\\SKOLE\\emneOBJ2000\\eksamenstesting\\personID.txt");
+            File fil = new File("C:\\Users\\loren\\OneDrive\\Desktop\\Skolestuff\\OBJProgsemester2\\personID.txt");
             if(!fil.exists()){
                 PrintWriter utSkriv = new PrintWriter(fil);
                 //tildeltPersonID = personID; ??
@@ -165,7 +161,7 @@ public class klientMain{
     static public void hentIDFraTekstFil() throws IOException, ClassNotFoundException{
 
         //skriv inn en filepath som passer deg
-        File fil = new File("C:\\SKOLE\\emneOBJ2000\\eksamenstesting\\personID.txt");
+        File fil = new File("C:\\Users\\loren\\OneDrive\\Desktop\\Skolestuff\\OBJProgsemester2\\personID.txt");
         Scanner skanner = new Scanner(fil);
         socket = new Socket(host,port);
         skrivUt = new DataOutputStream(socket.getOutputStream());
@@ -176,8 +172,8 @@ public class klientMain{
 
         System.out.println(id);
         tildeltPersonID = id;
-        skrivUt.writeUTF("LOGGINN");
-        skrivUt.writeInt(id);
+        //skrivUt.writeUTF("LOGGINN");
+        //skrivUt.writeInt(id);
 
         skrivUt.close();
         skanner.close();

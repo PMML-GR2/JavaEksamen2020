@@ -109,6 +109,7 @@ public class DatingDB {
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
+        System.out.println("minProfil");
         return innloggetBruker;
 
     }
@@ -170,6 +171,7 @@ public class DatingDB {
         ArrayList<Integer> interessert = new ArrayList<>();
 
         String sql = "SELECT * FROM interessert WHERE likerID = " + PersonID;
+       System.out.print("interessert I meg før sql laging " + sql);
 
        try (Connection conn = connect();
             Statement stmt = conn.createStatement();
@@ -181,16 +183,19 @@ public class DatingDB {
        } catch (SQLException e) {
            System.out.println(e.getMessage());
        }
-       String sql2 = "SELECT * from bruker WHERE PersonID = ";
-       int i = 0;
-       for (int ID : interessert) {
-           if (i >= 1)
-               sql2 += " OR PersonID = " + ID;
-           else
-               sql2 += ID;
-           i++;
-       }
-       return brukerFyll(sql2);
+       if(interessert.size() != 0) {
+           String sql2 = "SELECT * from bruker WHERE PersonID = ";
+           int i = 0;
+           for (int ID : interessert) {
+               if (i >= 1)
+                   sql2 += " OR PersonID = " + ID;
+               else
+                   sql2 += ID;
+               i++;
+           }
+           System.out.println("interessert I meg etter sql laging " + sql2);
+           return brukerFyll(sql2);
+       } else return new ArrayList<Bruker>();
    }
 
    //Skriver ut alle brukere som pålogget-bruker er interessert i
@@ -219,7 +224,7 @@ public class DatingDB {
            i++;
        }
        System.out.println("MineValg");
-       System.out.println(sql2);
+       System.out.println(sql2 + "-Minevalg");
        return brukerFyll(sql2);
    }
 

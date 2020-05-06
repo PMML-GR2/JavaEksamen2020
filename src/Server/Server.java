@@ -15,6 +15,7 @@ public class Server {
     static int port = 8000;
     static ServerSocket serverSocket = startOpp(port);
     static String handling;
+    static int personID;
     static Socket socket;
     static ArrayList<Bruker> brukerListe = new ArrayList<>();
 
@@ -36,11 +37,13 @@ public class Server {
         //Lytter og venter på at noen skal koble seg til å lage ny bruker
         try {
             while (true) {
-                Socket socket = serverSocket.accept();
+                socket = serverSocket.accept();
 
                 System.out.println("kjører");
                 innTekst = new DataInputStream(socket.getInputStream());
                 handling = innTekst.readUTF();
+                System.out.println(handling);
+
 
                 switch (handling) {
                     case "REGISTRER":
@@ -58,12 +61,14 @@ public class Server {
                         break;
                     case "INTERESSERT":
                         System.out.println("Interessert");
+                        //System.out.println(innTekst.readUTF() + " " + innTekst.readUTF());
                         visMatch = new TaskHentValg(socket);
                         visMatch.run();
                         break;
                     case "LOGIN":
-                        System.out.println("Logg Inn Id: ");
-                        loginBruker = new TaskBrukerLogin(socket);
+                        personID = innTekst.readInt();
+                        System.out.println("Logg Inn " + personID);
+                        loginBruker = new TaskBrukerLogin(socket, personID);
                         loginBruker.run();
 
                         break;
