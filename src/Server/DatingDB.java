@@ -110,7 +110,6 @@ public class DatingDB {
         System.out.println("minProfil");
         return innloggetBruker;
     }
-
     static public ArrayList<Bruker> sammenligneInteresser(ArrayList<Bruker> brukerTabell, Bruker eier) {
         int i = 0;
         ArrayList<String> eierInteresse = new ArrayList<>();
@@ -141,7 +140,6 @@ public class DatingDB {
         }
         return nyTabell;
     }
-
     // Legger inn interessert forholdet mellom brukere
    static public void oppdaterInteressert(int PersonID1, int PersonID2) {
        String sql2 = "INSERT INTO interessert VALUES (?,?)";
@@ -156,7 +154,6 @@ public class DatingDB {
            System.out.println(e.getMessage());
        }
    }
-
    //Skriver ut alle som liker meg
    static public ArrayList<Bruker> interessertIMeg(int PersonID) {
         ArrayList<Integer> interessert = new ArrayList<>();
@@ -174,23 +171,20 @@ public class DatingDB {
        } catch (SQLException e) {
            System.out.println(e.getMessage());
        }
-
-       String sql2 = "SELECT * from bruker WHERE PersonID = ";
-       int i = 0;
-       for (int ID : interessert) {
-           if (i >= 1)
-               sql2 += " OR PersonID = " + ID;
-           else
-               sql2 += ID;
-           i++;
-       }
-       System.out.println(interessert + "INTERESSERTIMEGTABELLEN");
-       System.out.println(sql + "interessertIMeg1");
-       System.out.println(sql2 + "interessertIMeg2");
-       return brukerFyll(sql2);
-
+        if (interessert.size() != 0) {
+            String sql2 = "SELECT * from bruker WHERE PersonID = ";
+            int i = 0;
+            for (int ID : interessert) {
+                if (i >= 1)
+                    sql2 += " OR PersonID = " + ID;
+                else
+                    sql2 += ID;
+                i++;
+            }
+            return brukerFyll(sql2);
+        }
+        else return new ArrayList<>();
    }
-
    //Skriver ut alle brukere som pålogget-bruker er interessert i
    static public ArrayList<Bruker> mineValg(int PersonID) {
        ArrayList<Integer> interessert = new ArrayList<>();
@@ -207,19 +201,19 @@ public class DatingDB {
        } catch (SQLException e) {
            System.out.println(e.getMessage());
        }
-       String sql2 = "SELECT * from bruker WHERE PersonID = ";
-       int i = 0;
-       for (int ID : interessert) {
-           if (i >= 1)
-               sql2 += " OR PersonID = " + ID;
-           else
-               sql2 += ID;
-           i++;
+       if (interessert.size() != 0) {
+           String sql2 = "SELECT * from bruker WHERE PersonID = ";
+           int i = 0;
+           for (int ID : interessert) {
+               if (i >= 1)
+                   sql2 += " OR PersonID = " + ID;
+               else
+                   sql2 += ID;
+               i++;
+           }
+           return brukerFyll(sql2);
        }
-
-       System.out.println(sql2+ "mineValg");
-
-       return brukerFyll(sql2);
+       else return new ArrayList<>();
    }
 
     //Hjelpemetode for å skrive ut alle brukere som har fulgt en kriterie laget utenfor

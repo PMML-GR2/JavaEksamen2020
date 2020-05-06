@@ -10,7 +10,6 @@ import java.util.ArrayList;
 
 public class Server {
     //static private Thread registrerBruker = new Thread(new TaskRegistrerBruker(8000));
-
     //initialiserer server variablene
     static int port = 8000;
     static ServerSocket serverSocket = startOpp(port);
@@ -27,6 +26,7 @@ public class Server {
         TaskRegistrerBruker regBruker;
         TaskHentValg visMatch;
         TaskBrukerLogin loginBruker;
+        TaskHentInteresserte visInteresserte;
 
         //DatingDB.visMineUtsendtInfo(11);
         //ArrayList<String> test = new ArrayList<>();
@@ -38,7 +38,6 @@ public class Server {
         try {
             while (true) {
                 socket = serverSocket.accept();
-
                 System.out.println("kjører");
                 innTekst = new DataInputStream(socket.getInputStream());
                 handling = innTekst.readUTF();
@@ -56,11 +55,13 @@ public class Server {
                         kjørSøk = new TaskKjørSøk(socket);
                         kjørSøk.run();
                         break;
-                    case "KONTAKT":
-                        System.out.println("Kontakt");
+                    case "INTERESSERTIMEG":
+                        System.out.println("Valgt meg");
+                        visInteresserte = new TaskHentInteresserte(socket);
+                        visInteresserte.run();
                         break;
                     case "INTERESSERT":
-                        System.out.println("Interessert");
+                        System.out.println("Mine valg");
                         //System.out.println(innTekst.readUTF() + " " + innTekst.readUTF());
                         visMatch = new TaskHentValg(socket);
                         visMatch.run();

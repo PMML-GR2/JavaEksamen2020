@@ -20,7 +20,6 @@ public class TaskHentValg implements Runnable {
 
     Socket socket;
     DataInputStream innTekst = null;
-    DataOutputStream utTekst = null;
     ObjectOutputStream outObject = null;
 
     public TaskHentValg(Socket socket){
@@ -33,13 +32,10 @@ public class TaskHentValg implements Runnable {
 
             //Lag dataOutput til klient
             innTekst = new DataInputStream(socket.getInputStream());
-            utTekst = new DataOutputStream(socket.getOutputStream());
             outObject = new ObjectOutputStream(socket.getOutputStream());
 
             SpørrID = innTekst.readInt();
             VisID = innTekst.readInt();
-
-            System.out.println("ID'r: " + SpørrID + " "  + VisID);
 
             //Legger inn interessert forholdet mellom brukere
             DatingDB.oppdaterInteressert(SpørrID, VisID);
@@ -47,17 +43,13 @@ public class TaskHentValg implements Runnable {
             brukerListe = DatingDB.mineValg(SpørrID);
 
             outObject.writeObject(brukerListe);
-            System.out.println("TASK");
-            System.out.println(brukerListe);
-
-
 
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
             try {
-                utTekst.close();
                 innTekst.close();
+                outObject.close();
             } catch (IOException e) {
                 e.printStackTrace();
             }

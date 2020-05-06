@@ -30,16 +30,12 @@ public class TaskBrukerLogin implements Runnable {
             System.out.println("Bruker Login");
 
             //Lag dataOutput til klient
-            //utTekst = new DataOutputStream(socket.getOutputStream());
 
             outObject = new ObjectOutputStream(socket.getOutputStream());
 
             minBruker = DatingDB.minProfil(personID);
-            System.out.println(minBruker);
             interessertI = DatingDB.mineValg(personID);
-            System.out.println(interessertI);
             likerMeg = DatingDB.interessertIMeg(personID);
-            System.out.println(likerMeg);
 
             outObject.writeObject(interessertI);
             outObject.writeObject(likerMeg);
@@ -49,7 +45,6 @@ public class TaskBrukerLogin implements Runnable {
             e.printStackTrace();
         } finally {
             try {
-                utTekst.close();
                 outObject.close();
 
             } catch (IOException e) {

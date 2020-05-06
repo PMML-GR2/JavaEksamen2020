@@ -19,12 +19,8 @@ public class TaskKjørSøk implements Runnable {
    Socket socket;
     DataInputStream innTekst = null;
     DataOutputStream utTekst = null;
-<<<<<<< HEAD
-    ArrayList<Bruker> bruker;
 
-=======
     ArrayList<Bruker> brukerListe;
->>>>>>> aee309804a7fa75c80fc16a46a3b1ad560ba4bf0
 
     public TaskKjørSøk(Socket socket){
         this.socket = socket;
