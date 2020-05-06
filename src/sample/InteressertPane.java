@@ -8,8 +8,6 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
-import java.util.ArrayList;
-
 public class InteressertPane extends BorderPane {
     private Label tekst;
     private Label overskrift;
@@ -21,6 +19,10 @@ public class InteressertPane extends BorderPane {
     private Button profilHjerteknapp;
 /*    private ArrayList<String> matcher;*/
 
+
+    //alle personer som har trykket på deg, med navn, alder, telefon, sted, kjønn, interesse
+
+    //https://cdn4.iconfinder.com/data/icons/momenticons-basic/32x32/favorites.png
 
     public InteressertPane() {
         testBox1 = new VBox();
