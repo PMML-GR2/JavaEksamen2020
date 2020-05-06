@@ -8,8 +8,6 @@ import java.util.ArrayList;
 
 public class Server {
 
-
-
     //initialiserer server variablene
     static int port = 8000;
     static ServerSocket serverSocket = startOpp(port);
@@ -25,7 +23,6 @@ public class Server {
         TaskRegistrerBruker regBruker;
         TaskHentValg visMatch;
         TaskBrukerLogin loginBruker;
-
         TaskHentInteresserte visInteresserte;
 
         //Lytter og venter på at noen skal koble seg til å lage ny bruker

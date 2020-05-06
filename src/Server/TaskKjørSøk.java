@@ -5,6 +5,7 @@ import sample.Bruker;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
 
@@ -38,15 +39,15 @@ public class TaskKjørSøk implements Runnable {
                 maxAlder = innTekst.readInt();
                 System.out.println(kjønn + " " +personID + " " + minAlder + " " + maxAlder);
 
-
                 brukerListe.addAll(DatingDB.søkMatch(personID,kjønn,minAlder,maxAlder));
 
-            System.out.println("Ble jeg ferdig? : " + brukerListe);
+                System.out.println("Ble jeg ferdig? : " + brukerListe);
                 utObject = new ObjectOutputStream(socket.getOutputStream());
 
                 utObject.writeObject(brukerListe);
 
-        } catch (IOException e) {
+        }
+        catch (IOException e) {
             e.printStackTrace();
         }
         finally {
