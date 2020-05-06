@@ -15,6 +15,10 @@ public class Bruker implements Comparable, Serializable {
     private int poengSum;
 
 
+    public Bruker () {
+
+    }
+
     public Bruker(int personID, String fornavn, String kjonn, int alder, ArrayList interresser, String bosted, String tlfNr) {
         this.personID = personID;
         this.fornavn = fornavn;

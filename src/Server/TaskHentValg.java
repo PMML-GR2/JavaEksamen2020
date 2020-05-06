@@ -6,17 +6,13 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
-import java.lang.reflect.Array;
-import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.Collections;
 
 public class TaskHentValg implements Runnable {
     int SpørrID;
     int VisID;
     ArrayList<Bruker> brukerListe = new ArrayList<>();
-
 
     Socket socket;
     DataInputStream innTekst = null;
@@ -40,12 +36,15 @@ public class TaskHentValg implements Runnable {
             SpørrID = innTekst.readInt();
             VisID = innTekst.readInt();
 
-            brukerListe = DatingDB.mineValg(SpørrID);
+
             DatingDB.oppdaterInteressert(SpørrID, VisID);
+            brukerListe = DatingDB.mineValg(SpørrID);
 
             outObject.writeObject(brukerListe);
             System.out.println("TASK");
             System.out.println(brukerListe);
+
+
 
         } catch (IOException e) {
             e.printStackTrace();
