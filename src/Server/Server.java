@@ -1,6 +1,6 @@
 package Server;
 
-import sample.Bruker;
+import GUI.Bruker;
 
 import java.io.DataInputStream;
 import java.io.IOException;

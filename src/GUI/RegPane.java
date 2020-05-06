@@ -1,4 +1,4 @@
-package sample;
+package GUI;
 
 import javafx.geometry.Insets;
 import javafx.scene.control.*;

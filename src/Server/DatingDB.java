@@ -1,8 +1,7 @@
 package Server;
 import java.sql.*;
 import java.util.*;
-
-import sample.Bruker;
+import GUI.Bruker;
 
 public class DatingDB {
 
@@ -86,9 +85,36 @@ public class DatingDB {
             System.out.println(e.getMessage());
         }
     }
+    // Skriver ut profilinformasjon
+    static public Bruker minProfil(int PersonID) {
+        Bruker innloggetBruker = new Bruker();
+        String sql2 = "SELECT * FROM Bruker WHERE PersonID = " + PersonID;
 
-    //Går igjennom alle matcher sine interesser og gir dem poeng dersom det er en match i interesse.
-    //Sender ut liste med brukere sortert fra størst til minst poeng. Dem med mest poeng har mest til felles.
+        try (Connection conn = connect();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sql2)) {
+            while (rs.next()) {
+                //Henter all brukerinfoen og legger dem inn i brukertabellen.
+                int personID = rs.getInt("PersonID");
+                String navn = rs.getString("Navn");
+                String kjønn = rs.getString("Kjonn");
+                int alder = rs.getInt("Alder");
+                String interesseTekst = rs.getString("interesser");
+                String bosted = rs.getString("Bosted");
+                String tlfNr = rs.getString("Tlf");
+                int lengde = interesseTekst.length() - 1;
+                String kuttInteresseTekst = interesseTekst.substring(1, lengde);
+                String[] splitTabell = kuttInteresseTekst.split(",");
+
+                innloggetBruker = new Bruker(personID, navn, kjønn, alder, new ArrayList<>(Arrays.asList(splitTabell)), bosted,tlfNr);
+
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return innloggetBruker;
+
+    }
     static public void sammenligneInteresser(ArrayList<Bruker> brukerTabell, Bruker eier) {
         int i = 0;
         ArrayList<String> eierInteresse = new ArrayList<>();
