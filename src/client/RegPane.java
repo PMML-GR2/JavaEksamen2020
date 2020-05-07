@@ -29,8 +29,7 @@ public class RegPane extends VBox {
     private TextField textFieldTlfNr;
     private Button lagreKnapp;
     private DataService dataService;
-    private ProfilePane profilePane;
-
+    private Label beskjed;
 
     public RegPane() {
         this.mainPane = mainPane;
@@ -49,7 +48,6 @@ public class RegPane extends VBox {
                 "-fx-spacing: 10"
         );
         getChildren().add(overskrift);
-
 
         labelFulltnavn = new Label("Fullt navn: ");
         getChildren().add(labelFulltnavn);
@@ -98,18 +96,28 @@ public class RegPane extends VBox {
         lagreKnapp.setStyle("-fx-background-color:#ce93a2;");
         lagreKnapp.setPrefSize(150, 35);
         lagreKnapp.setOnAction(event -> {
-                try {
+               /* try {
                     lagre();
                 } catch (IOException e) {
                     e.printStackTrace();
                 } catch (ClassNotFoundException e) {
                     e.printStackTrace();
                 }
-
-            //mainPane.setCenter(mainPane);
+*/
+               if(dataService.getBruker() == null) {
+                   beskjed.setText("Registrering feilet!");
+               }else beskjed.setText("Du er registrert!");
         });
 
         getChildren().add(lagreKnapp);
+        beskjed = new Label("");
+        beskjed.setPadding(new Insets(20, 0, 20, 60));
+        beskjed.setFont(
+                Font.font("Verdana",
+                        FontWeight.BOLD,
+                        18)
+        );
+        getChildren().add(beskjed);
 
     }
 
