@@ -1,6 +1,5 @@
 package client;
 
-
 import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
@@ -8,7 +7,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-
 import java.io.IOException;
 
 
@@ -115,8 +113,6 @@ public class SokePane extends BorderPane {
 
             interessertListPane.getChildren().clear();
             dataService.getMatchBrukere().stream()
-                    //.filter(bruker -> sok.isBeggeKjonn() || bruker.getKjonn().equals(sok.isMann() ? "Mann" : "Kvinne"))
-                    //.filter(bruker -> bruker.getAlder() >= sok.getFraAlder() && bruker.getAlder() <= sok.getTilAlder())
                     .forEach(bruker -> {
                         interessertListPane.addInteressert(new InteressertPane(bruker, this.mainPane));
                     });

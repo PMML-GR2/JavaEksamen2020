@@ -1,9 +1,7 @@
 package Server;
 
 import client.Bruker;
-
 import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
@@ -28,8 +26,6 @@ public class TaskKjørSøk implements Runnable {
     @Override
     public void run() {
         try {
-                System.out.println("Bruker gjør ett søk");
-
                 //Lag dataOutput til klient
                 innTekst = new DataInputStream(socket.getInputStream());
 
@@ -38,11 +34,9 @@ public class TaskKjørSøk implements Runnable {
                 personID = innTekst.readInt();
                 minAlder = innTekst.readInt();
                 maxAlder = innTekst.readInt();
-                System.out.println(kjønn + " " + personID + " " + minAlder + " " + maxAlder);
 
                 brukerListe.addAll(DatingDB.søkMatch(personID,kjønn,minAlder,maxAlder));
 
-                System.out.println("Ble jeg ferdig? : " + brukerListe);
                 utObject = new ObjectOutputStream(socket.getOutputStream());
 
                 utObject.writeObject(brukerListe);

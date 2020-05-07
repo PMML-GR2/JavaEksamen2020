@@ -50,7 +50,6 @@ public class TaskRegistrerBruker implements Runnable{
                     interesser.add(s);
                 }
                 utTekst.writeInt(DatingDB.registrerBruker(navn,k,alder,interesser,bosted,tlf));
-                System.out.println("En bruker er registrert");
         }
         catch (IOException e) {
             e.printStackTrace();

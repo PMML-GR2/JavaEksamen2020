@@ -8,6 +8,8 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
+import java.io.IOException;
+
 public class InteressertPane extends BorderPane {
     private Label tekst;
     private Label overskrift;
@@ -35,6 +37,13 @@ public class InteressertPane extends BorderPane {
         profilHjerteknapp.setStyle("-fx-background-color:transparent;");
         profilHjerteknapp.setOnAction(event -> {
             DataService.getInstance().getLagtTilBruker().add(bruker);
+            try {
+                klientMain.interessertI("INTERESSERT",bruker.getPersonID());
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            }
             mainPane.setCenter(new ProfilePane(bruker));
         });
 

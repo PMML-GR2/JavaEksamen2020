@@ -1,11 +1,8 @@
 package client;
 
 import java.io.*;
-import java.net.Socket;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Scanner;
 
 public class DataService {
 
@@ -19,13 +16,6 @@ public class DataService {
 
     private DataService() {
 
-        //lagEksempelBruker();
-        //eksempelLikerMeg();
-        //brukerLike();
-
-        //System.out.println("bruker blir likt: " +lagtTilBruker);
-        //System.out.println("Bruker liker: " +brukerHarLagtTil);
-        //System.out.println("Denne brukeren: " +bruker);
     }
 
     public static DataService getInstance() {
@@ -75,7 +65,6 @@ public class DataService {
 
     public  void setLagtTilBruker(List<Bruker> lagtTilBruker) {
         this.lagtTilBruker = lagtTilBruker;
-
     }
 
     public  void setBrukerHarLagtTil(List<Bruker> brukerHarLagtTil) {

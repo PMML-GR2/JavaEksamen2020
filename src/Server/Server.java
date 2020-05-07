@@ -31,15 +31,12 @@ public class Server {
         try {
             while (true) {
                 socket = serverSocket.accept();
-                System.out.println("kjører");
                 innTekst = new DataInputStream(socket.getInputStream());
                 handling = innTekst.readUTF();
-                System.out.println(handling);
 
                 //Velger det som bruker har bedt om
                 switch (handling) {
                     case "REGISTRER":
-                        System.out.println("Dette er REGISTER");
                         regBruker = new TaskRegistrerBruker(socket);
                         regBruker.run();
                         break;
@@ -48,18 +45,15 @@ public class Server {
                         kjørSøk.run();
                         break;
                     case "INTERESSERTIMEG":
-                        System.out.println("Valgt meg");
                         visInteresserte = new TaskHentInteresserte(socket);
                         visInteresserte.run();
                         break;
                     case "INTERESSERT":
-                        System.out.println("Mine valg");
                         visMatch = new TaskHentValg(socket);
                         visMatch.run();
                         break;
                     case "LOGIN":
                         personID = innTekst.readInt();
-                        System.out.println("Logg Inn " + personID);
                         loginBruker = new TaskBrukerLogin(socket, personID);
                         loginBruker.run();
                         break;

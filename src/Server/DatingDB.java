@@ -1,4 +1,5 @@
 package Server;
+
 import java.sql.*;
 import java.util.*;
 import client.Bruker;
@@ -6,7 +7,6 @@ import client.Bruker;
 //database klassen - Tar seg av all kobling mot databasen og
 //sender ut resultat til Task klassene som tar seg av socket kommunikasjon
 public class DatingDB {
-
 
     //kobler seg til databasen
     public static Connection connect() {
@@ -45,10 +45,10 @@ public class DatingDB {
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(sql)) {
             persID = rs.getInt("PersonID");
-            System.out.print("INNI HEEEEEEEEER" + persID);
         } catch (SQLException e) {
-            System.out.println(e.getMessage() + "HEIEHIEFHSDF");
+            System.out.println(e.getMessage());
         }
+        oppdaterInteressert(1,persID);
         return persID;
     }
 
@@ -103,7 +103,6 @@ public class DatingDB {
             Bruker innloggetBruker = new Bruker();
             String sql2 = "SELECT * FROM bruker WHERE PersonID = " + PersonID;
 
-            System.out.println(sql2 + "minprofil");
             try (Connection conn = connect();
                  Statement stmt = conn.createStatement();
                  ResultSet rs = stmt.executeQuery(sql2)) {
@@ -119,7 +118,6 @@ public class DatingDB {
                     int lengde = interesseTekst.length() - 1;
                     String kuttInteresseTekst = interesseTekst.substring(1, lengde);
                     String[] splitTabell = kuttInteresseTekst.split(",");
-                    System.out.println("jeg har gått en runde i while");
                     innloggetBruker = new Bruker(personID, navn, kjønn, alder, new ArrayList<>(Arrays.asList(splitTabell)), bosted, tlfNr);
                 }
             } catch (SQLException e) {
@@ -166,10 +164,6 @@ public class DatingDB {
                 nyTabell.remove(nyTabell.size()-1);
                 fjern--;
             }
-        }
-
-        for(Bruker b: nyTabell) {
-            System.out.println(b.getPersonID() + ": " + b.getPoengSum() + " " + b.getFulltNavn());  // Linda endret (sto getFornavn)
         }
         return nyTabell;
     }
@@ -218,7 +212,6 @@ public class DatingDB {
                         sql2 += ID;
                     i++;
                 }
-                System.out.println(sql+sql2 + "InteressertiMeg");
                 return brukerFyll(sql2);
             } else return new ArrayList<>();
         } return new ArrayList<>();
@@ -252,7 +245,6 @@ public class DatingDB {
                        sql2 += ID;
                    i++;
                }
-               System.out.println(sql+sql2 + "mineValg");
                return brukerFyll(sql2);
            } else return new ArrayList<>();
        } return new ArrayList<>();
@@ -286,7 +278,6 @@ public class DatingDB {
         catch (SQLException e) {
             e.printStackTrace();
         }
-        System.out.println("BrukerFyllFERDIG");
         return brukerListe;
     }
 }

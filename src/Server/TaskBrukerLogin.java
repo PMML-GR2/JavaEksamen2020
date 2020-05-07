@@ -1,4 +1,5 @@
 package Server;
+
 import client.Bruker;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
@@ -24,17 +25,13 @@ public class TaskBrukerLogin implements Runnable {
     @Override
     public void run() {
         try {
-            System.out.println("Bruker Login");
             //Lag dataOutput til klient
             outObject = new ObjectOutputStream(socket.getOutputStream());
 
             //bruker metodene i DatingDB for å behandle dataene med sqli
             minBruker = DatingDB.minProfil(personID);
-            System.out.println("minbruker" + minBruker);
             interessertI = DatingDB.mineValg(personID);
-            System.out.println("interesserti" + interessertI);
             likerMeg = DatingDB.interessertIMeg(personID);
-            System.out.println("likermeg" + likerMeg);
             //Skriver ut arraylist
             outObject.writeObject(interessertI);
             outObject.writeObject(likerMeg);

@@ -8,9 +8,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
-
 import java.io.IOException;
-import java.util.Arrays;
 
 public class RegPane extends VBox {
     private BorderPane mainPane;
@@ -96,14 +94,14 @@ public class RegPane extends VBox {
         lagreKnapp.setStyle("-fx-background-color:#ce93a2;");
         lagreKnapp.setPrefSize(150, 35);
         lagreKnapp.setOnAction(event -> {
-               /* try {
+                try {
                     lagre();
                 } catch (IOException e) {
                     e.printStackTrace();
                 } catch (ClassNotFoundException e) {
                     e.printStackTrace();
                 }
-*/
+
                if(dataService.getBruker() == null) {
                    beskjed.setText("Registrering feilet!");
                }else beskjed.setText("Du er registrert!");

@@ -1,4 +1,5 @@
 package client;
+
 import java.io.*;
 import java.net.*;
 import java.io.DataOutputStream;
@@ -16,33 +17,15 @@ public class klientMain{
     static ArrayList<Bruker> interessertI = new ArrayList<>();
     static ArrayList<Bruker> likerMeg = new ArrayList<>();
     static Bruker bruker;
-    //static DataService dataservice;
 
     static DataOutputStream skrivUt;
     static DataInputStream hentTekst;
     static ObjectOutputStream skrivObjekt;
     static ObjectInputStream lesObjekt;
 
-    //kjører spørringene
-    public static void main(String[] args) {
-        try{
-            hentIDFraTekstFil();
-            oppStart("LOGIN");
-            //interessertI("INTERESSERT",tildeltPersonID,11);
-            //interessertIMeg("INTERESSERTIMEG", tildeltPersonID);
-            //sokKlient("SOK","K", tildeltPersonID,18, 70);
-            //registrerBruker("REGISTRER","Mango", "M", 36,"Hoppetau,Turn,Mat","Porsgrunn","323352352");
 
-        }catch(IOException ex){
-            //Kanskje skrive en besked i GUI om at man har skrevet inn ulovlig/feil informasjon???
-            ex.printStackTrace();
-        }catch(ClassNotFoundException ex2){
-            ex2.printStackTrace();
-        }
-    }
     static public void oppStart(String handling) throws IOException, ClassNotFoundException {
         if (tildeltPersonID != 0) {
-            //System.out.print("Jeg er inni her");
             DataService dataservice = DataService.getInstance();
             socket = new Socket(host,port);
             skrivUt = new DataOutputStream(socket.getOutputStream());
@@ -60,10 +43,6 @@ public class klientMain{
             dataservice.setBrukerHarLagtTil(likerMeg);
             dataservice.setBruker(bruker);
 
-            System.out.println(interessertI);
-            System.out.println(likerMeg);
-            System.out.println(bruker);
-
             skrivUt.close();
             lesObjekt.close();
             socket.close();
@@ -76,7 +55,6 @@ public class klientMain{
         socket = new Socket(host,port);
         skrivUt = new DataOutputStream(socket.getOutputStream());
         hentTekst = new DataInputStream(socket.getInputStream());
-//skrivHandle = new ObjectOutputStream(socket.getOutputStream());
 
         skrivUt.writeUTF(handling);
         skrivUt.writeUTF(navn);
@@ -86,19 +64,15 @@ public class klientMain{
         skrivUt.writeUTF(by);
         skrivUt.writeUTF(tlf);
 
-        System.out.println("Data sendt");
-
 //Sender brukerens tildelte personID etter registrering.
         tildeltPersonID = hentTekst.readInt();
         skrivTilTekstFil(tildeltPersonID);
 
-        System.out.println(tildeltPersonID);
         oppStart("LOGIN");
 
         hentTekst.close();
         skrivUt.close();
         socket.close();
-//skrivHandle.close();
     }
 
     static public void sokKlient(String handling, String kjonn, int miniAlder, int maxAlder)  throws IOException,
@@ -115,10 +89,7 @@ public class klientMain{
 
         lesObjekt = new ObjectInputStream(socket.getInputStream());
 
-        System.out.println(handling+ " " + kjonn+ " " +miniAlder+ " " +maxAlder);
-        //søkTreff.addAll((ArrayList<Bruker>)lesObjekt.readObject());
 
-        System.out.println("SøkResultat: " + søkTreff);
         DataService.getInstance().setMatchBrukere((ArrayList<Bruker>)lesObjekt.readObject());
 
         lesObjekt.close();
@@ -126,21 +97,21 @@ public class klientMain{
         socket.close();
     }
 
-    public static void interessertI(String handling,int personID, int likerID) throws IOException,
+    public static void interessertI(String handling,int likerID) throws IOException,
             ClassNotFoundException{
+        DataService dataservice = DataService.getInstance();
         socket = new Socket(host,port);
         skrivUt = new DataOutputStream(socket.getOutputStream());
 
 
         skrivUt.writeUTF(handling);
-        skrivUt.writeInt(personID);
+        skrivUt.writeInt(tildeltPersonID);
         skrivUt.writeInt(likerID);
 
         lesObjekt = new ObjectInputStream(socket.getInputStream());
 
         interessertI.addAll((ArrayList<Bruker>)lesObjekt.readObject());
-
-        System.out.println(interessertI);
+        dataservice.setBrukerHarLagtTil(interessertI);
 
         lesObjekt.close();
         skrivUt.close();
@@ -161,8 +132,6 @@ public class klientMain{
 
         likerMeg.addAll((ArrayList<Bruker>)lesObjekt.readObject());
 
-        System.out.println(likerMeg);
-
         lesObjekt.close();
         skrivUt.close();
         socket.close();
@@ -176,7 +145,6 @@ public class klientMain{
             File fil = new File("C:\\SKOLE\\emneOBJ2000\\eksamenstesting\\personID.txt");
             if(!fil.exists()){
                 PrintWriter utSkriv = new PrintWriter(fil);
-                //tildeltPersonID = personID; ??
                 utSkriv.print(personID);
                 utSkriv.close();
             }
@@ -197,10 +165,7 @@ public class klientMain{
             while (skanner.hasNext()) {
                 id = skanner.nextInt();
             }
-
-            System.out.println(id);
             tildeltPersonID = id;
-
             skrivUt.writeInt(id);
 
             skrivUt.close();

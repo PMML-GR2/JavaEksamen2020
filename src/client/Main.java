@@ -11,7 +11,6 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
-
 import java.io.IOException;
 
 public class Main extends Application {
@@ -41,7 +40,6 @@ public class Main extends Application {
         try {
             klientMain.hentIDFraTekstFil();
             klientMain.oppStart("LOGIN");
-            System.out.println("patrick");
         }
         catch (IOException e) {
             e.printStackTrace();
